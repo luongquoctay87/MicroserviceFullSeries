@@ -1,6 +1,8 @@
 # Thiết kế mô hình ứng dụng và sơ đồ luồng ứng dụng
-1. Vẽ microservice architecture
+### 1. Vẽ microservice architecture
 
 ![MicroserviceFullSeries.png](MicroserviceFullSeries.png)
 
-2. Vẽ sơ đồ luồng user onboarding
+### 2. Vẽ sơ đồ luồng thanh toán
+
+![PaymentFlow.png](PaymentFlow.png)

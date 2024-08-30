@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2024-08-30T05:50:45.511Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.5.3 Chrome/124.0.6367.207 Electron/30.0.6 Safari/537.36" etag="l-76ammbakwJx8tqLwpR" version="24.5.3" type="device">
+<mxfile host="Electron" modified="2024-08-30T04:42:09.446Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.5.3 Chrome/124.0.6367.207 Electron/30.0.6 Safari/537.36" etag="3Q53Q6SkZSyYWJRCuwbt" version="24.5.3" type="device">
   <diagram name="Page-1" id="s9T8C-GyFNTnV4g63xKH">
-    <mxGraphModel dx="2057" dy="908" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="2428" dy="1188" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -354,29 +354,14 @@
         <mxCell id="zxlBYHo0lnK8-v2Jy7Ye-32" value="" style="dashed=0;outlineConnect=0;html=1;align=center;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;shape=mxgraph.weblogos.java;aspect=fixed;" parent="zxlBYHo0lnK8-v2Jy7Ye-19" vertex="1">
           <mxGeometry x="744" y="519.0300000000001" width="14" height="26.44" as="geometry" />
         </mxCell>
-        <mxCell id="jxpUwsgAmOjXjiTjpM7Y-3" value="" style="group" parent="zxlBYHo0lnK8-v2Jy7Ye-19" vertex="1" connectable="0">
+        <mxCell id="jxpUwsgAmOjXjiTjpM7Y-3" value="" style="group" vertex="1" connectable="0" parent="zxlBYHo0lnK8-v2Jy7Ye-19">
           <mxGeometry x="410" y="309" width="506" height="160" as="geometry" />
         </mxCell>
-        <mxCell id="jxpUwsgAmOjXjiTjpM7Y-4" value="Tây Java" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=128;fontColor=#CC0000;fontStyle=1;fontFamily=Times New Roman;container=0;rotation=0;textOpacity=5;" parent="jxpUwsgAmOjXjiTjpM7Y-3" vertex="1">
+        <mxCell id="jxpUwsgAmOjXjiTjpM7Y-4" value="Tây Java" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=128;fontColor=#CC0000;fontStyle=1;fontFamily=Times New Roman;container=0;rotation=0;textOpacity=5;" vertex="1" parent="jxpUwsgAmOjXjiTjpM7Y-3">
           <mxGeometry width="506" height="160" as="geometry" />
         </mxCell>
-        <mxCell id="jxpUwsgAmOjXjiTjpM7Y-5" value="Lập Trình Java Từ A~Z" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontColor=#003366;container=0;rotation=0;textOpacity=30;fontFamily=Courier New;" parent="jxpUwsgAmOjXjiTjpM7Y-3" vertex="1">
+        <mxCell id="jxpUwsgAmOjXjiTjpM7Y-5" value="Lập Trình Java Từ A~Z" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontColor=#003366;container=0;rotation=0;textOpacity=30;fontFamily=Courier New;" vertex="1" parent="jxpUwsgAmOjXjiTjpM7Y-3">
           <mxGeometry x="226" y="130" width="269" height="24" as="geometry" />
-        </mxCell>
-        <mxCell id="S9vkVZPMteHv3gWpzjZD-7" value="" style="group" vertex="1" connectable="0" parent="zxlBYHo0lnK8-v2Jy7Ye-19">
-          <mxGeometry x="1188" y="815" width="111.79999999999995" height="42" as="geometry" />
-        </mxCell>
-        <mxCell id="S9vkVZPMteHv3gWpzjZD-8" value="" style="dashed=0;outlineConnect=0;html=1;align=center;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;shape=mxgraph.weblogos.youtube_2;fillColor=#FF2626;gradientColor=#B5171F;aspect=fixed;" vertex="1" parent="S9vkVZPMteHv3gWpzjZD-7">
-          <mxGeometry y="2" width="20" height="16" as="geometry" />
-        </mxCell>
-        <mxCell id="S9vkVZPMteHv3gWpzjZD-9" value="" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image=img/lib/active_directory/internet_globe.svg;" vertex="1" parent="S9vkVZPMteHv3gWpzjZD-7">
-          <mxGeometry y="22" width="20" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="S9vkVZPMteHv3gWpzjZD-10" value="Tây Java" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#da1e23;fontFamily=Times New Roman;" vertex="1" parent="S9vkVZPMteHv3gWpzjZD-7">
-          <mxGeometry x="24.799999999999955" width="47" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="S9vkVZPMteHv3gWpzjZD-11" value="https://tayjava.vn" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#0000CC;fontFamily=Times New Roman;" vertex="1" parent="S9vkVZPMteHv3gWpzjZD-7">
-          <mxGeometry x="24.799999999999955" y="22" width="87" height="20" as="geometry" />
         </mxCell>
         <mxCell id="zxlBYHo0lnK8-v2Jy7Ye-192" value="" style="group" parent="1" vertex="1" connectable="0">
           <mxGeometry x="-140.5" y="1140" width="1110" height="600" as="geometry" />
@@ -535,7 +520,7 @@
         <mxCell id="zxlBYHo0lnK8-v2Jy7Ye-187" value="Payment Flow" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Comic Sans MS;fontSize=20;fontColor=#4C0099;" parent="zxlBYHo0lnK8-v2Jy7Ye-192" vertex="1">
           <mxGeometry x="10.5" y="10" width="130" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="jxpUwsgAmOjXjiTjpM7Y-2" value="" style="group" parent="zxlBYHo0lnK8-v2Jy7Ye-192" vertex="1" connectable="0">
+        <mxCell id="jxpUwsgAmOjXjiTjpM7Y-2" value="" style="group" vertex="1" connectable="0" parent="zxlBYHo0lnK8-v2Jy7Ye-192">
           <mxGeometry x="310.5" y="230" width="506" height="160" as="geometry" />
         </mxCell>
         <mxCell id="zxlBYHo0lnK8-v2Jy7Ye-10" value="Tây Java" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=128;fontColor=#CC0000;fontStyle=1;fontFamily=Times New Roman;container=0;rotation=0;textOpacity=5;" parent="jxpUwsgAmOjXjiTjpM7Y-2" vertex="1">
@@ -543,21 +528,6 @@
         </mxCell>
         <mxCell id="zxlBYHo0lnK8-v2Jy7Ye-11" value="Lập Trình Java Từ A~Z" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontColor=#003366;container=0;rotation=0;textOpacity=30;fontFamily=Courier New;" parent="jxpUwsgAmOjXjiTjpM7Y-2" vertex="1">
           <mxGeometry x="226" y="130" width="269" height="24" as="geometry" />
-        </mxCell>
-        <mxCell id="S9vkVZPMteHv3gWpzjZD-6" value="" style="group" vertex="1" connectable="0" parent="zxlBYHo0lnK8-v2Jy7Ye-192">
-          <mxGeometry x="990.5" y="555" width="111.79999999999995" height="42" as="geometry" />
-        </mxCell>
-        <mxCell id="S9vkVZPMteHv3gWpzjZD-1" value="" style="dashed=0;outlineConnect=0;html=1;align=center;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;shape=mxgraph.weblogos.youtube_2;fillColor=#FF2626;gradientColor=#B5171F;aspect=fixed;" vertex="1" parent="S9vkVZPMteHv3gWpzjZD-6">
-          <mxGeometry y="2" width="20" height="16" as="geometry" />
-        </mxCell>
-        <mxCell id="S9vkVZPMteHv3gWpzjZD-2" value="" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image=img/lib/active_directory/internet_globe.svg;" vertex="1" parent="S9vkVZPMteHv3gWpzjZD-6">
-          <mxGeometry y="22" width="20" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="S9vkVZPMteHv3gWpzjZD-3" value="Tây Java" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#da1e23;fontFamily=Times New Roman;" vertex="1" parent="S9vkVZPMteHv3gWpzjZD-6">
-          <mxGeometry x="24.799999999999955" width="47" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="S9vkVZPMteHv3gWpzjZD-4" value="https://tayjava.vn" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#0000CC;fontFamily=Times New Roman;" vertex="1" parent="S9vkVZPMteHv3gWpzjZD-6">
-          <mxGeometry x="24.799999999999955" y="22" width="87" height="20" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
