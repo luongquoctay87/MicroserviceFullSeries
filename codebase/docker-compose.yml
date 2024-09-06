@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin
+    ports:
+      - '9411:9411'
+    networks:
+      - default
+
+networks:
+  default:
+    name: tay-java-network

@@ -1,0 +1,28 @@
+server:
+  port: 8761
+
+spring:
+  application:
+    name: discovery-server
+  security: # security eureka server by spring security
+    user:
+      name: ${EUREKA_USER:admin}
+      password: ${EUREKA_PASSWORD:password}
+
+eureka: # eureka server info
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+  server:
+    enable-self-preservation: false
+
+management: # allow show all actuator endpoint
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+logging: # config logging level
+  level:
+    com.netflix.eureka: OFF
+    com.netflix.discovery: OFF
