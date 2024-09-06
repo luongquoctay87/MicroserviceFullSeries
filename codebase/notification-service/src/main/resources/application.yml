@@ -1,0 +1,12 @@
+server:
+  port: 8088
+
+spring:
+  application:
+    name: notification-service
+
+management: # cho phép hiển thị thông tin sức khoẻ của service
+  endpoints:
+    web:
+      exposure:
+        include: '*'

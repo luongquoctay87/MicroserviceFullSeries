@@ -1,0 +1,12 @@
+server:
+  port: 8089
+
+spring:
+  application:
+    name: batch-job
+
+management: # cho phép hiển thị thông tin sức khoẻ của service
+  endpoints:
+    web:
+      exposure:
+        include: '*'

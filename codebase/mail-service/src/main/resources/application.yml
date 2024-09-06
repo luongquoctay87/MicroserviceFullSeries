@@ -1,0 +1,12 @@
+server:
+  port: 8087
+
+spring:
+  application:
+    name: mail-service
+
+management: # cho phép hiển thị thông tin sức khoẻ của service
+  endpoints:
+    web:
+      exposure:
+        include: '*'

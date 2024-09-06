@@ -1,0 +1,12 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: account-service
+
+management: # cho phép hiển thị thông tin sức khoẻ của service
+  endpoints:
+    web:
+      exposure:
+        include: '*'

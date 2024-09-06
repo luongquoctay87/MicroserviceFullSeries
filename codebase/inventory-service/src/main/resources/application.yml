@@ -1,0 +1,12 @@
+server:
+  port: 8086
+
+spring:
+  application:
+    name: inventory-service
+
+management: # cho phép hiển thị thông tin sức khoẻ của service
+  endpoints:
+    web:
+      exposure:
+        include: '*'
