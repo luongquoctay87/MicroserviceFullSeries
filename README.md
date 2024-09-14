@@ -1,6 +1,7 @@
 # Thiết Kế codeBase Microservice Theo Mô Hình Của Netflix
 
 ![spring-boot-microservice.png](spring-boot-microservice.png)
+Nguồn tham khảo: https://spring.io/cloud
 
 ![netflix-microservice.jpg](netflix-microservice.jpg)
 
@@ -670,10 +671,5 @@ management.tracing.sampling.probability=1 # dành cho spring-boot 3 trở lên
 > Chuyển sang phần devOps
 
 ---
-Source reference: https://spring.io/cloud
->Developing distributed systems can be challenging. Complexity is moved from the application layer to the network layer and demands greater interaction between services. Making your code ‘cloud-native’ means dealing with 12-factor issues such as external configuration, statelessness, logging, and connecting to backing services. The Spring Cloud suite of projects contains many of the services you need to make your applications run in the cloud.
-
-
----
-### Nguồn tham khảo:
- - [Spring Cloud](https://spring.io/cloud)
+## Bài tập
+Xây dựng ứng dụng microservice theo hướng dẫn phía trên.
