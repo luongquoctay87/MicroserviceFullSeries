@@ -114,4 +114,4 @@ Source refers:
 ![microservices.png](images/microservices-04.png)
 
 ---
-Link google sheet: [Tổng quan về kiến trúc microservice](https://docs.google.com/document/d/1KphcZdRhZPPDAQ9EEG2h2EqwGcgqsbIhu1KLL-GaykE/edit#heading=h.dpfm6n1m4429)
+## Câu hỏi phỏng vấn
