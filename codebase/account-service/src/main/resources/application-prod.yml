@@ -1,0 +1,18 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+  devtools:
+    add-properties: true
+  jpa:
+    # Provide database platform that is being used
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      # New database is created when app starts and destroyed when app stops
+      ddl-auto: none
+    # Show sql when spring data jpa performs query
+    show-sql: false
+    properties:
+      hibernate:
+        # Format queries
+        format_sql: true
