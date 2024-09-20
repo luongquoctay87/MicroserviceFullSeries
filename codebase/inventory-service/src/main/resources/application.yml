@@ -4,9 +4,30 @@ server:
 spring:
   application:
     name: inventory-service
+  profiles:
+    active: @spring.profiles.active@
 
-management: # cho phép hiển thị thông tin sức khoẻ của service
+management: # Health check
   endpoints:
     web:
       exposure:
         include: '*'
+#  endpoint:
+#    health:
+#      probes:
+#        enabled: true
+#  health:
+#    livenessState:
+#      enabled: true
+#    readinessState:
+#      enabled: true
+#  prometheus:
+#    metrics:
+#      export:
+#        step: 5s
+#        enabled: true
+
+logging:
+  level:
+    root: INFO
+    web: OFF

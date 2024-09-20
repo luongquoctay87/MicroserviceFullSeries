@@ -2,8 +2,8 @@ FROM openjdk:17
 
 ARG JAR_FILE=target/*.jar
 
-COPY ${JAR_FILE} batch-job.jar
+COPY ${JAR_FILE} inventory-service.jar
 
-ENTRYPOINT ["java", "-jar", "batch-job.jar"]
+ENTRYPOINT ["java", "-jar", "inventory-service.jar"]
 
-EXPOSE 8089
+EXPOSE 8086
