@@ -1,0 +1,51 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+  devtools:
+    add-properties: false
+  cloud:
+    gateway:
+      routes: # điều hướng request đến service tương ứng thông qua chỉ định trên url
+        - id: authentication-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/auth/**, /v3/api-docs/authentication-service
+          filters:
+            - RewritePath=/auth/(?<segment>.*), /$\{segment} # thay thế ký tự /auth/ thành /
+        - id: account-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/account/**, /v3/api-docs/account-service
+          filters:
+            - RewritePath=/account/(?<segment>.*), /$\{segment} # thay thế ký tự /account/ thành /
+        - id: product-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/product/**, /v3/api-docs/product-service
+          filters:
+            - RewritePath=/product/(?<segment>.*), /product/$\{segment} # thay thế ký tự /product/ thành /
+        - id: order-service
+          uri: http://localhost:8084
+          predicates:
+            - Path=/order/**, /v3/api-docs/order-service
+          filters:
+            - RewritePath=/order/(?<segment>.*), /order/$\{segment} # thay thế ký tự /order/ thành /
+        - id: inventory-service
+          uri: http://localhost:8086
+          predicates:
+            - Path=/inventory/**, /v3/api-docs/inventory-service
+          filters:
+            - RewritePath=/inventory/(?<segment>.*), /inventory/$\{segment} # thay thế ký tự /inventory/ thành /
+        - id: mail-service
+          uri: http://localhost:8087
+          predicates:
+            - Path=/mail/**, /v3/api-docs/mail-service
+          filters:
+            - RewritePath=/mail/(?<segment>.*), /mail/$\{segment} # thay thế ký tự /mail/ thành /
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
