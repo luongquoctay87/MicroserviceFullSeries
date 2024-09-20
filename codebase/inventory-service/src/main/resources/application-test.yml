@@ -27,5 +27,5 @@ openapi:
   service:
     api-docs: inventory-service
     server: ${API_GATEWAY:http://localhost:4953}/inventory
-    title: INVENTORY SERVICE
+    title: Inventory service
     version: 1.0.0

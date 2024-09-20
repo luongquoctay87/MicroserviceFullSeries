@@ -27,5 +27,5 @@ openapi:
   service:
     api-docs: inventory-service
     server: http://localhost:${server.port}
-    title: INVENTORY SERVICE
+    title: Inventory service
     version: 1.0.0
