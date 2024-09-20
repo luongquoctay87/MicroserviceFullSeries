@@ -2,8 +2,8 @@ FROM openjdk:17
 
 ARG JAR_FILE=target/*.jar
 
-COPY ${JAR_FILE} notification-service.jar
+COPY ${JAR_FILE} order-service.jar
 
-ENTRYPOINT ["java", "-jar", "notification-service.jar"]
+ENTRYPOINT ["java", "-jar", "order-service.jar"]
 
-EXPOSE 8088
+EXPOSE 8084

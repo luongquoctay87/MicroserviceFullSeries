@@ -1,6 +1,6 @@
 package vn.tayjava.service;
 
-public interface MailService {
+public interface OrderService {
 
-    long addUser();
+
 }
