@@ -1,6 +1,6 @@
 package vn.tayjava.service;
 
-public interface InventoryService {
+public interface MailService {
 
-    long addUser();
+
 }

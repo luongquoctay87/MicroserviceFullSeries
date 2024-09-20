@@ -1,8 +1,9 @@
 server:
-  port: 8082
+  port: 8087
+
 spring:
   application:
-    name: inventory-service
+    name: mail-service
   profiles:
     active: @spring.profiles.active@
 

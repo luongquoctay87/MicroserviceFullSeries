@@ -1,11 +1,9 @@
 package vn.tayjava.service.impl;
 
-import vn.tayjava.service.AccountService;
+import org.springframework.stereotype.Service;
+import vn.tayjava.service.MailService;
 
-public class InventoryServiceImpl implements AccountService {
+@Service
+public class MailServiceImpl implements MailService {
 
-    @Override
-    public long addUser() {
-        return 0;
-    }
 }

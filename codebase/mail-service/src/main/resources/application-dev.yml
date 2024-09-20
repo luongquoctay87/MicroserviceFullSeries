@@ -25,7 +25,7 @@ springdoc:
     enabled: true
 openapi:
   service:
-    api-docs: inventory-service
+    api-docs: mail-service
     server: http://localhost:${server.port}
-    title: INVENTORY SERVICE
+    title: Mail service
     version: 1.0.0
