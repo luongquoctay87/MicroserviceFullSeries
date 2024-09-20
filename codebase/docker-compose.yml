@@ -47,13 +47,93 @@ services:
     networks:
       - default
 
+  auth-service:
+    container_name: authentication-service
+    build:
+      context: ./authentication-service
+      dockerfile: Dockerfile
+    ports:
+      - '8081:8081'
+    networks:
+      - default
+
   account-service:
     container_name: account-service
     build:
       context: ./account-service
       dockerfile: Dockerfile
     ports:
-      - '8081:8081'
+      - '8082:8082'
+    networks:
+      - default
+
+  product-service:
+    container_name: product-service
+    build:
+      context: ./product-service
+      dockerfile: Dockerfile
+    ports:
+      - '8083:8083'
+    networks:
+      - default
+
+  order-service:
+    container_name: order-service
+    build:
+      context: ./order-service
+      dockerfile: Dockerfile
+    ports:
+      - '8084:8084'
+    networks:
+      - default
+
+  payment-service:
+    container_name: payment-service
+    build:
+      context: ./payment-service
+      dockerfile: Dockerfile
+    ports:
+      - '8085:8085'
+    networks:
+      - default
+
+  inventory-service:
+    container_name: inventory-service
+    build:
+      context: ./inventory-service
+      dockerfile: Dockerfile
+    ports:
+      - '8086:8086'
+    networks:
+      - default
+
+  mail-service:
+    container_name: mail-service
+    build:
+      context: ./mail-service
+      dockerfile: Dockerfile
+    ports:
+      - '8087:8087'
+    networks:
+      - default
+
+  notification-service:
+    container_name: notification-service
+    build:
+      context: ./notification-service
+      dockerfile: Dockerfile
+    ports:
+      - '8088:8088'
+    networks:
+      - default
+
+  batch-job:
+    container_name: batch-job
+    build:
+      context: ./batch-job
+      dockerfile: Dockerfile
+    ports:
+      - '8088:8088'
     networks:
       - default
 
