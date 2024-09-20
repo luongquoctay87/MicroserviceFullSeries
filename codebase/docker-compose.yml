@@ -1,47 +1,49 @@
 version: "3.9"
 
 services:
-  redis:
-    image: redis:6.2-alpine
-    container_name: redis
-    hostname: redis
-    ports:
-      - '6379:6379'
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-      - REDIS_DISABLE_COMMANDS=FLUSHDB;FLUSHALL
-    networks:
-      - default
-
-  zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-    container_name: zookeeper
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-    ports:
-      - '22181:2181'
-
-  kafka:
-    image: confluentinc/cp-kafka:latest
-    container_name: kafka
-    depends_on:
-      - zookeeper
-    ports:
-      - '29092:29092'
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+#  redis:
+#    image: redis:6.2-alpine
+#    container_name: redis
+#    hostname: redis
+#    ports:
+#      - '6379:6379'
+#    environment:
+#      - ALLOW_EMPTY_PASSWORD=yes
+#      - REDIS_DISABLE_COMMANDS=FLUSHDB;FLUSHALL
+#    networks:
+#      - default
+#
+#  zookeeper:
+#    image: confluentinc/cp-zookeeper:latest
+#    container_name: zookeeper
+#    environment:
+#      ZOOKEEPER_CLIENT_PORT: 2181
+#      ZOOKEEPER_TICK_TIME: 2000
+#    ports:
+#      - '22181:2181'
+#
+#  kafka:
+#    image: confluentinc/cp-kafka:latest
+#    container_name: kafka
+#    depends_on:
+#      - zookeeper
+#    ports:
+#      - '29092:29092'
+#    environment:
+#      KAFKA_BROKER_ID: 1
+#      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+#      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
   api-gateway:
     container_name: api-gateway
     build:
       context: ./api-gateway
       dockerfile: Dockerfile
+    environment:
+      HOST_NAME: host.docker.internal
     ports:
       - '4953:4953'
     networks:
@@ -133,7 +135,7 @@ services:
       context: ./batch-job
       dockerfile: Dockerfile
     ports:
-      - '8088:8088'
+      - '8089:8089'
     networks:
       - default
 

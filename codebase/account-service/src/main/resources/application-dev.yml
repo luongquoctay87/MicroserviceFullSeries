@@ -27,5 +27,5 @@ openapi:
   service:
     api-docs: account-service
     server: http://localhost:${server.port}
-    title: ACCOUNT SERVICE
+    title: Account service
     version: 1.0.0
