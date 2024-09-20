@@ -25,7 +25,7 @@ springdoc:
     enabled: true
 openapi:
   service:
-    api-docs: mail-service
-    server: ${API_GATEWAY:http://localhost:4953}/mail
-    title: MAIL SERVICE
+    api-docs: product-service
+    server: ${API_GATEWAY:http://localhost:4953}/product
+    title: Product service
     version: 1.0.0

@@ -25,7 +25,7 @@ springdoc:
     enabled: true
 openapi:
   service:
-    api-docs: mail-service
+    api-docs: product-service
     server: http://localhost:${server.port}
-    title: MAIL SERVICE
+    title: Product service
     version: 1.0.0
