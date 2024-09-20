@@ -6,4 +6,4 @@ COPY ${JAR_FILE} account-service.jar
 
 ENTRYPOINT ["java", "-jar", "account-service.jar"]
 
-EXPOSE 8081
+EXPOSE 8082

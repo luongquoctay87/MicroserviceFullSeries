@@ -2,8 +2,8 @@ FROM openjdk:17
 
 ARG JAR_FILE=target/*.jar
 
-COPY ${JAR_FILE} account-service.jar
+COPY ${JAR_FILE} batch-job.jar
 
-ENTRYPOINT ["java", "-jar", "account-service.jar"]
+ENTRYPOINT ["java", "-jar", "batch-job.jar"]
 
-EXPOSE 8081
+EXPOSE 8089

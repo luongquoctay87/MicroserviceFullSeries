@@ -18,8 +18,8 @@ import java.util.List;
 public class SpringFoxConfig {
     @Bean
     public GroupedOpenApi publicApi(@Value("${openapi.service.api-docs}") String apiDocs) {
-        return org.springdoc.core.models.GroupedOpenApi.builder()
-                .group(apiDocs) // /v3/api-docs/account-service
+        return GroupedOpenApi.builder()
+                .group(apiDocs) // /v3/api-docs/notification-service
                 .packagesToScan("vn.tayjava.controller")
                 .build();
     }
@@ -32,7 +32,7 @@ public class SpringFoxConfig {
         return new OpenAPI()
                 .servers(List.of(new Server().url(serverUrl)))
                 .info(new Info().title(title)
-                        .description("API documents for Account Service")
+                        .description("API documents for Notification service")
                         .version(version)
                         .license(new License().name("Apache 2.0").url("https://springdoc.org")));
     }

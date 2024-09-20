@@ -25,7 +25,7 @@ springdoc:
     enabled: true
 openapi:
   service:
-    api-docs: account-service
+    api-docs: notification-service
     server: http://localhost:${server.port}
-    title: ACCOUNT SERVICE
+    title: Notification service
     version: 1.0.0

@@ -1,8 +1,9 @@
 server:
-  port: 8082
+  port: 8088
+
 spring:
   application:
-    name: account-service
+    name: notification-service
   profiles:
     active: @spring.profiles.active@
 
