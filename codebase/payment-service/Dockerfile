@@ -2,8 +2,8 @@ FROM openjdk:17
 
 ARG JAR_FILE=target/*.jar
 
-COPY ${JAR_FILE} order-service.jar
+COPY ${JAR_FILE} payment-service.jar
 
-ENTRYPOINT ["java", "-jar", "order-service.jar"]
+ENTRYPOINT ["java", "-jar", "payment-service.jar"]
 
-EXPOSE 8084
+EXPOSE 8085

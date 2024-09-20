@@ -16,16 +16,3 @@ spring:
       hibernate:
         # Format queries
         format_sql: true
-
-# API document setting
-springdoc:
-  api-docs:
-    enabled: true
-  swagger-ui:
-    enabled: true
-openapi:
-  service:
-    api-docs: mail-service
-    server: http://localhost:${server.port}
-    title: MAIL SERVICE
-    version: 1.0.0
