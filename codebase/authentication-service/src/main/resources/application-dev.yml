@@ -17,7 +17,6 @@ spring:
         # Format queries
         format_sql: true
 
-# API document setting
 springdoc:
   api-docs:
     enabled: true
@@ -25,7 +24,7 @@ springdoc:
     enabled: true
 openapi:
   service:
-    api-docs: account-service
+    api-docs: authentication-service
     server: http://localhost:${server.port}
-    title: ACCOUNT SERVICE
+    title: Authentication service
     version: 1.0.0
