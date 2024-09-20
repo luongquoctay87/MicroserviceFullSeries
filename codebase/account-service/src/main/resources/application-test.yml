@@ -1,9 +1,9 @@
 spring:
   config:
     activate:
-      on-profile: dev
+      on-profile: test
   devtools:
-    add-properties: true
+    add-properties: false
   jpa:
     # Provide database platform that is being used
     database-platform: org.hibernate.dialect.H2Dialect
@@ -15,4 +15,17 @@ spring:
     properties:
       hibernate:
         # Format queries
-        format_sql: true
+        format_sql: false
+
+# API document setting
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+openapi:
+  service:
+    api-docs: account-service
+    server: ${API_GATEWAY:http://localhost:4953}/account
+    title: ACCOUNT SERVICE
+    version: 1.0.0

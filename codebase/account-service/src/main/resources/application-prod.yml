@@ -3,7 +3,7 @@ spring:
     activate:
       on-profile: prod
   devtools:
-    add-properties: true
+    add-properties: false
   jpa:
     # Provide database platform that is being used
     database-platform: org.hibernate.dialect.H2Dialect
@@ -15,4 +15,11 @@ spring:
     properties:
       hibernate:
         # Format queries
-        format_sql: true
+        format_sql: false
+
+# API document setting
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

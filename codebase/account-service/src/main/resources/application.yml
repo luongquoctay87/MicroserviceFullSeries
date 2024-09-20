@@ -1,13 +1,12 @@
 server:
-  port: 8081
+  port: 8082
 spring:
   application:
     name: account-service
   profiles:
     active: @spring.profiles.active@
 
-# Health check
-management:
+management: # Health check
   endpoints:
     web:
       exposure:
@@ -27,7 +26,6 @@ management:
 #        step: 5s
 #        enabled: true
 
-# Logging
 logging:
   level:
     root: INFO
