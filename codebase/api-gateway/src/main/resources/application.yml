@@ -1,31 +1,3 @@
-server:
-  port: 4953
-
 spring:
-  application:
-    name: api-gateway
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: '*'
-  endpoint:
-    health:
-      probes:
-        enabled: true
-  health:
-    livenessState:
-      enabled: true
-    readinessState:
-      enabled: true
-  prometheus:
-    metrics:
-      export:
-        step: 5s
-        enabled: true
-
-logging:
-  level:
-    root: INFO
-    web: INFO
+  profiles:
+    active: @spring.profiles.active@
