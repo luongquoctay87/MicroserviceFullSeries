@@ -1,6 +1,7 @@
 package vn.tayjava.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,5 +12,10 @@ public class UserController {
     @GetMapping("/list")
     public String getAll() {
         return "user list";
+    }
+
+    @PostMapping("/register")
+    public long register() {
+        return 0;
     }
 }

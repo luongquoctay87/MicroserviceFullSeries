@@ -13,12 +13,14 @@ spring:
             - Path=/auth/**, /v3/api-docs/authentication-service
           filters:
             - RewritePath=/auth/(?<segment>.*), /$\{segment} # thay thế ký tự /auth/ thành /
+            - ApiRequestFilter
         - id: account-service
           uri: http://${HOST_NAME:localhost}:8082
           predicates:
             - Path=/account/**, /v3/api-docs/account-service
           filters:
             - RewritePath=/account/(?<segment>.*), /$\{segment} # thay thế ký tự /account/ thành /
+            - ApiRequestFilter
         - id: product-service
           uri: http://${HOST_NAME:localhost}:8083
           predicates:

@@ -8,6 +8,6 @@ public class AuthenticationController {
 
     @PostMapping("/access-token")
     public String accessToken() {
-        return "Access Token";
+        return "xxx-token";
     }
 }
