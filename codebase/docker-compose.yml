@@ -54,6 +54,8 @@ services:
     build:
       context: ./authentication-service
       dockerfile: Dockerfile
+    environment:
+      HOST_NAME: host.docker.internal
     ports:
       - '8081:8081'
     networks:
@@ -64,6 +66,8 @@ services:
     build:
       context: ./account-service
       dockerfile: Dockerfile
+    environment:
+      HOST_NAME: host.docker.internal
     ports:
       - '8082:8082'
     networks:
@@ -74,6 +78,8 @@ services:
     build:
       context: ./product-service
       dockerfile: Dockerfile
+    environment:
+      HOST_NAME: host.docker.internal
     ports:
       - '8083:8083'
     networks:
@@ -84,6 +90,8 @@ services:
     build:
       context: ./order-service
       dockerfile: Dockerfile
+    environment:
+      HOST_NAME: host.docker.internal
     ports:
       - '8084:8084'
     networks:
@@ -104,6 +112,8 @@ services:
     build:
       context: ./inventory-service
       dockerfile: Dockerfile
+    environment:
+      HOST_NAME: host.docker.internal
     ports:
       - '8086:8086'
     networks:
@@ -114,6 +124,8 @@ services:
     build:
       context: ./mail-service
       dockerfile: Dockerfile
+    environment:
+      HOST_NAME: host.docker.internal
     ports:
       - '8087:8087'
     networks:
@@ -124,6 +136,8 @@ services:
     build:
       context: ./notification-service
       dockerfile: Dockerfile
+    environment:
+      HOST_NAME: host.docker.internal
     ports:
       - '8088:8088'
     networks:
