@@ -41,7 +41,6 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public String generateToken(Long userId, String username, Collection<? extends GrantedAuthority> authorities) {
-
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", userId);
         claims.put("role", authorities);

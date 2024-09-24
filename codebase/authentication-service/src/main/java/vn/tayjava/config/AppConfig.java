@@ -27,7 +27,6 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class AppConfig {
 
     private final UserService userService;
-    private final RequestFilter requestFilter;
 
     private String[] WHITE_LIST = {"/access-token", "/refresh-token"};
 
@@ -55,8 +54,7 @@ public class AppConfig {
     public SecurityFilterChain configure(@NonNull HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests.requestMatchers(WHITE_LIST).permitAll().anyRequest().authenticated())
-                .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
-                .authenticationProvider(provider()).addFilterBefore(requestFilter, UsernamePasswordAuthenticationFilter.class);
+                .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS));
         return http.build();
     }
 

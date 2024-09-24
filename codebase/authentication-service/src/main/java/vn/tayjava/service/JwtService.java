@@ -2,7 +2,6 @@ package vn.tayjava.service;
 
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import vn.tayjava.common.TokenType;
 
 import java.util.Collection;
