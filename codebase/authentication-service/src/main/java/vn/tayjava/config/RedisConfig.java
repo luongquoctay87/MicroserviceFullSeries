@@ -13,11 +13,12 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 @Configuration
 @EnableRedisRepositories
 @Profile({"dev", "test"})
-@Slf4j(topic = "REDIS-CACHE")
+@Slf4j(topic = "REDIS-CONFIG")
 public class RedisConfig {
 
     @Value("${redis.host}")
     private String redisHost;
+
     @Value("${redis.port}")
     private int redisPort;
 

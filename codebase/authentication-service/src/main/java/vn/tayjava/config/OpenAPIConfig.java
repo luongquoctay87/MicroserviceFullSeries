@@ -15,7 +15,7 @@ import java.util.List;
 
 @Configuration
 @Profile({"dev", "test"})
-public class SpringFoxConfig {
+public class OpenAPIConfig {
     @Bean
     public GroupedOpenApi publicApi(@Value("${openapi.service.api-docs}") String apiDocs) {
         return org.springdoc.core.models.GroupedOpenApi.builder()

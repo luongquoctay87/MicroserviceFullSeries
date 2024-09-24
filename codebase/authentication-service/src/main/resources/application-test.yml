@@ -5,18 +5,21 @@ spring:
   devtools:
     add-properties: false
   datasource:
-    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/postgres}
+    url: jdbc:postgresql://${POSTGRES_URL:localhost:5432/postgres}
     username: ${POSTGRES_USER:quoctay}
     password: ${POSTGRES_PASSWORD:password}
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: false
+    show-sql: true
     hibernate:
       ddl-auto: none
 
-# API document setting
+redis:
+  host: ${REDIS_HOST:host.docker.internal}
+  port: ${REDIS_PORT:6379}
+
 springdoc:
   api-docs:
     enabled: true

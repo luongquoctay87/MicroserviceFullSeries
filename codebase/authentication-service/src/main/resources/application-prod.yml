@@ -4,20 +4,22 @@ spring:
       on-profile: prod
   devtools:
     add-properties: false
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_URL:dummy-postgres-url}
+    username: ${POSTGRES_USER:dummy-postgres-user}
+    password: ${POSTGRES_PASSWORD:dummy-postgres-password}
   jpa:
-    # Provide database platform that is being used
-    database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      # New database is created when app starts and destroyed when app stops
-      ddl-auto: none
-    # Show sql when spring data jpa performs query
-    show-sql: false
     properties:
       hibernate:
-        # Format queries
-        format_sql: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: none
 
-# API document setting
+redis:
+  host: ${REDIS_HOST}
+  port: ${REDIS_PORT:6379}
+
 springdoc:
   api-docs:
     enabled: false
