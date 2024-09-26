@@ -19,6 +19,7 @@ import vn.tayjava.service.JwtService;
 import java.util.List;
 
 import static org.springframework.http.HttpHeaders.REFERER;
+import static vn.tayjava.common.TokenType.ACCESS_TOKEN;
 import static vn.tayjava.common.TokenType.REFRESH_TOKEN;
 
 @Service
@@ -87,5 +88,17 @@ public class AuthenticationServiceImp implements AuthenticationService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    @Override
+    public Boolean verifyToken(String token) {
+        try {
+            final String userName = jwtService.extractUsername(token, ACCESS_TOKEN);
+            var user = userRepository.findByUsername(userName);
+
+            return jwtService.isValid(token, ACCESS_TOKEN, user.getUsername());
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

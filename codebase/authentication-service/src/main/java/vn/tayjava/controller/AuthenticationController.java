@@ -5,9 +5,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import vn.tayjava.common.TokenType;
 import vn.tayjava.controller.request.LoginRequest;
 import vn.tayjava.controller.response.TokenResponse;
 import vn.tayjava.service.AuthenticationService;
@@ -32,4 +31,10 @@ public record AuthenticationController(AuthenticationService authenticationServi
         log.info("POST /refresh-token");
         return new ResponseEntity<>(authenticationService.createRefreshToken(request), OK);
     }
+
+//    @GetMapping("/verify-token")
+//    public boolean verifyToken(@RequestParam String token) {
+//        log.info("GET /verify-token");
+//        return authenticationService.verifyToken(token);
+//    }
 }

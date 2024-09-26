@@ -9,4 +9,6 @@ public interface AuthenticationService {
     TokenResponse createAccessToken(LoginRequest request);
 
     TokenResponse createRefreshToken(HttpServletRequest request);
+
+    Boolean verifyToken(String token);
 }
