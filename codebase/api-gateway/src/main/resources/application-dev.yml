@@ -68,3 +68,7 @@ springdoc:
         name: Inventory Service
       - url: /v3/api-docs/mail-service
         name: Mail Service
+
+redis:
+  host: localhost
+  port: 6379
