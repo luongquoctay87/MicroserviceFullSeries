@@ -1,15 +1,16 @@
 server:
   port: 8081
-grpc:
-  server:
-    port: 9091
-    inProcessName: auth-server
 
 spring:
   application:
     name: authentication-service
   profiles:
     active: @spring.profiles.active@
+
+grpc:
+  server:
+    port: 9091
+    inProcessName: auth-server
 
 management: # Health check
   endpoints:

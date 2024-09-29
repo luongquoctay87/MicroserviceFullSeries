@@ -26,29 +26,6 @@
         <protobuf.version>3.21.12</protobuf.version>
     </properties>
 
-<!--    <dependencies>-->
-<!--        <dependency>-->
-<!--            <groupId>io.grpc</groupId>-->
-<!--            <artifactId>grpc-stub</artifactId>-->
-<!--            <version>${grpc.version}</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>io.grpc</groupId>-->
-<!--            <artifactId>grpc-protobuf</artifactId>-->
-<!--            <version>${grpc.version}</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>io.grpc</groupId>-->
-<!--            <artifactId>grpc-netty-shaded</artifactId>-->
-<!--            <version>${grpc.version}</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>io.grpc</groupId>-->
-<!--            <artifactId>grpc-services</artifactId>-->
-<!--            <version>${grpc.version}</version>-->
-<!--        </dependency>-->
-<!--    </dependencies>-->
-
     <dependencies>
         <dependency>
             <groupId>io.grpc</groupId>
@@ -129,7 +106,7 @@
                         io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}
                     </pluginArtifact>
                     <protoSourceRoot>
-                        src/main/java/vn/tayjava
+                        src/main/java/vn/tayjava/proto
                     </protoSourceRoot>
                 </configuration>
 
