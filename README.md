@@ -164,7 +164,7 @@ gRPC tích hợp chặt chẽ với TLS để cung cấp bảo mật giao tiếp
     ```
   
 - Bước 4: Generate ra gRPC service từ file HelloService.proto
-> Đê build thành công chúng ta cấn thêm 1 số dependecy protocol compile để biên dịch file `.proto` thành file `.class`
+> Để compile thành công chúng ta cần thêm 1 số dependency để biên dịch file .proto ra file .class
 ```xml
 <build>
   <!-- Extension for build file .proto -->
@@ -336,7 +336,7 @@ $ ./mvnw spring-boot:run
     ```
 
 - Bước 4: Generate ra gRPC service từ file HelloService.proto
-> Để compile thành công chúng ta cấn thêm 1 số dependency để biên dịch file `.proto` ra file `.class`
+> Để compile thành công chúng ta cần thêm 1 số dependency để biên dịch file .proto ra file .class
 ```xml
 <build>
   <!-- Extension for build file .proto -->
