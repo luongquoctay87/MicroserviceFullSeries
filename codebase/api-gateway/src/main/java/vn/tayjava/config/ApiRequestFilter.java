@@ -37,53 +37,56 @@ public class ApiRequestFilter extends AbstractGatewayFilterFactory<ApiRequestFil
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
-            ServerHttpRequest request = exchange.getRequest();
-            String url = request.getPath().toString();
-            log.info("-------------[ {} ]", url);
+            return chain.filter(exchange).then(Mono.fromRunnable(() -> {
+            }));
 
-            if (permitUrls.contains(url)) {
-                return chain.filter(exchange).then(Mono.fromRunnable(() -> {
-                }));
-            }
-
-            ServerHttpResponse response = exchange.getResponse();
-            HttpMethod httpMethod = request.getMethod();
-            HttpHeaders httpHeaders = response.getHeaders();
-            HttpHeaders requestHeaders = request.getHeaders();
-
-            if (requestHeaders.containsKey("Authorization")) {
-                HttpHeaders headers = new HttpHeaders();
-                headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-                HttpEntity<String> entity = new HttpEntity<>(headers);
-
-                // authentication
-                final String token = request.getHeaders().getOrEmpty("Authorization").get(0).substring(7);
-
-//                // TODO sau nay se goi bang gRPC
-//                String verifyUrl = String.format("http://localhost:8081/verify-token?token=%s", token);
+//            ServerHttpRequest request = exchange.getRequest();
+//            String url = request.getPath().toString();
+//            log.info("-------------[ {} ]", url);
 //
-//                Boolean result = restTemplate.getForObject(verifyUrl, Boolean.class);
+//            if (permitUrls.contains(url)) {
+//                return chain.filter(exchange).then(Mono.fromRunnable(() -> {
+//                }));
+//            }
 //
-//                assert result != null;
-//                if (!result) {
-//                    return error(exchange.getResponse(), url, "Token invalid");
-//                }
-
-                boolean accessToken = verifyTokenService.verifyToken(token, "ACCESS_TOKEN");
-                if (!accessToken) {
-                    return error(exchange.getResponse(), url, "Token invalid");
-                }
-
-                // Authorization
-                // 1. TODO decode token lay id role cua user
-                // 2. check user co quyen access cai url nay khong (permission)
-
-                log.info("Request valid");
-                return chain.filter(exchange).then(Mono.fromRunnable(() -> {
-                }));
-            } else {
-                return error(exchange.getResponse(), url, "Request invalid, Please try again!");
-            }
+//            ServerHttpResponse response = exchange.getResponse();
+//            HttpMethod httpMethod = request.getMethod();
+//            HttpHeaders httpHeaders = response.getHeaders();
+//            HttpHeaders requestHeaders = request.getHeaders();
+//
+//            if (requestHeaders.containsKey("Authorization")) {
+//                HttpHeaders headers = new HttpHeaders();
+//                headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+//                HttpEntity<String> entity = new HttpEntity<>(headers);
+//
+//                // authentication
+//                final String token = request.getHeaders().getOrEmpty("Authorization").get(0).substring(7);
+//
+////                // TODO sau nay se goi bang gRPC
+////                String verifyUrl = String.format("http://localhost:8081/verify-token?token=%s", token);
+////
+////                Boolean result = restTemplate.getForObject(verifyUrl, Boolean.class);
+////
+////                assert result != null;
+////                if (!result) {
+////                    return error(exchange.getResponse(), url, "Token invalid");
+////                }
+//
+////                boolean accessToken = verifyTokenService.verifyToken(token, "ACCESS_TOKEN");
+////                if (!accessToken) {
+////                    return error(exchange.getResponse(), url, "Token invalid");
+////                }
+//
+//                // Authorization
+//                // 1. TODO decode token lay id role cua user
+//                // 2. check user co quyen access cai url nay khong (permission)
+//
+//                log.info("Request valid");
+//                return chain.filter(exchange).then(Mono.fromRunnable(() -> {
+//                }));
+//            } else {
+//                return error(exchange.getResponse(), url, "Request invalid, Please try again!");
+//            }
         };
     }
 

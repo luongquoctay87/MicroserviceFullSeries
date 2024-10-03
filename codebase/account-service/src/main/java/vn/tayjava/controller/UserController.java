@@ -1,32 +1,58 @@
 package vn.tayjava.controller;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import vn.tayjava.service.grpc.GrpcClientTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import vn.tayjava.controller.request.PwdChangeRequestDTO;
+import vn.tayjava.controller.request.UserCreationRequestDTO;
+import vn.tayjava.controller.request.UserUpdateDTO;
+import vn.tayjava.controller.response.UserResponseDTO;
+import vn.tayjava.exception.ResourceNotFoundException;
+import vn.tayjava.service.AccountService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
 
-    private final GrpcClientTest grpcClientTest;
+    private final AccountService accountService;
 
     @GetMapping("/list")
-    public String getAll() {
-        return "user list";
+    public List<UserResponseDTO> getAll() {
+        return accountService.getUsers();
     }
 
-    @PostMapping("/register")
-    public long register() {
-        return 0;
+    @GetMapping("/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<UserResponseDTO> getDetails(@PathVariable @Min(1) Long userId) {
+        try {
+            return new ResponseEntity<>(accountService.getUserDetails(userId), HttpStatus.OK);
+        } catch (ResourceNotFoundException e) {
+            return null;
+        }
     }
 
-    @GetMapping("/test-grpc")
-    public void testGRPC() {
-//        return grpcClientTest.testingGRPC();
-        grpcClientTest.verifyToken("eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjpbeyJhdXRob3JpdHkiOiJtYW5hZ2VyIn1dLCJ1c2VySWQiOjIsInN1YiI6ImFkbWluIiwiaWF0IjoxNzI3OTUzNDUzLCJleHAiOjE3Mjc5NTM1MTN9.f-Fa1Gts8hC0kyaLIoAfl1oPoiM6Qp0Ht6TIEYDVnec", "ACCESS_TOKEN");
+    @PostMapping("/add")
+    public long addUser(@RequestBody @Valid UserCreationRequestDTO dto) {
+        return accountService.addUser(dto);
+    }
+
+    @PutMapping("/upd")
+    public void updateUser(@RequestBody UserUpdateDTO dto) {
+        accountService.updateUser(dto);
+    }
+
+    @PatchMapping("/change-pwd")
+    public void changePassword(@RequestBody PwdChangeRequestDTO dto) {
+    }
+
+    @DeleteMapping("/del/{userId}")
+    public void deleteUser(@PathVariable @Min(1) Long userId) {
+
     }
 }
