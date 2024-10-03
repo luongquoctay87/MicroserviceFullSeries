@@ -32,7 +32,7 @@ public class ApiRequestFilter extends AbstractGatewayFilterFactory<ApiRequestFil
         this.verifyTokenService = verifyTokenService;
     }
 
-    private List<String> permitUrls = List.of("/user/register");
+    private List<String> permitUrls = List.of("/access-token", "/user/register");
 
     @Override
     public GatewayFilter apply(Config config) {

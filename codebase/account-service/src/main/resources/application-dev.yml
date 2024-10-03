@@ -32,3 +32,8 @@ grpc:
       enableKeepAlive: true
       keepAliveWithoutCalls: true
       negotiationType: plaintext
+    verify-token-service:
+      address: localhost:9091
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext

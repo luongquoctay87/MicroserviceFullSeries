@@ -72,3 +72,11 @@ springdoc:
 redis:
   host: localhost
   port: 6379
+
+grpc:
+  client:
+    verify-token-service:
+      address: localhost:9091
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext

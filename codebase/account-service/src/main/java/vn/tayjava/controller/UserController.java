@@ -25,7 +25,8 @@ public class UserController {
     }
 
     @GetMapping("/test-grpc")
-    public String testGRPC() {
-        return grpcClientTest.testingGRPC();
+    public void testGRPC() {
+//        return grpcClientTest.testingGRPC();
+        grpcClientTest.verifyToken("eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjpbeyJhdXRob3JpdHkiOiJtYW5hZ2VyIn1dLCJ1c2VySWQiOjIsInN1YiI6ImFkbWluIiwiaWF0IjoxNzI3OTUzNDUzLCJleHAiOjE3Mjc5NTM1MTN9.f-Fa1Gts8hC0kyaLIoAfl1oPoiM6Qp0Ht6TIEYDVnec", "ACCESS_TOKEN");
     }
 }
