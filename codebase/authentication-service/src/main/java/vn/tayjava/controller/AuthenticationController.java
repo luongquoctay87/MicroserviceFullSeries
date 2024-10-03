@@ -31,10 +31,4 @@ public record AuthenticationController(AuthenticationService authenticationServi
         log.info("POST /refresh-token");
         return new ResponseEntity<>(authenticationService.createRefreshToken(request), OK);
     }
-
-//    @GetMapping("/verify-token")
-//    public boolean verifyToken(@RequestParam String token) {
-//        log.info("GET /verify-token");
-//        return authenticationService.verifyToken(token);
-//    }
 }

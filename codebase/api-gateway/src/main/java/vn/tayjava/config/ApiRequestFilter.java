@@ -1,11 +1,11 @@
-package vn.tayjava;
+package vn.tayjava.config;
 
 import com.google.gson.Gson;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
-import org.springframework.core.io.PathResource;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.*;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -13,6 +13,7 @@ import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import reactor.core.publisher.Mono;
+import vn.tayjava.service.VerifyTokenService;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -22,11 +23,13 @@ import java.util.*;
 @Slf4j
 public class ApiRequestFilter extends AbstractGatewayFilterFactory<ApiRequestFilter.Config> {
 
-    @Autowired
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
+    private final VerifyTokenService verifyTokenService;
 
-    public ApiRequestFilter() {
+    public ApiRequestFilter(RestTemplate restTemplate, VerifyTokenService verifyTokenService) {
         super(Config.class);
+        this.restTemplate = restTemplate;
+        this.verifyTokenService = verifyTokenService;
     }
 
     private List<String> permitUrls = List.of("/user/register");
@@ -56,13 +59,18 @@ public class ApiRequestFilter extends AbstractGatewayFilterFactory<ApiRequestFil
                 // authentication
                 final String token = request.getHeaders().getOrEmpty("Authorization").get(0).substring(7);
 
-                // TODO sau nay se goi bang gRPC
-                String verifyUrl = String.format("http://localhost:8081/verify-token?token=%s", token);
+//                // TODO sau nay se goi bang gRPC
+//                String verifyUrl = String.format("http://localhost:8081/verify-token?token=%s", token);
+//
+//                Boolean result = restTemplate.getForObject(verifyUrl, Boolean.class);
+//
+//                assert result != null;
+//                if (!result) {
+//                    return error(exchange.getResponse(), url, "Token invalid");
+//                }
 
-                Boolean result = restTemplate.getForObject(verifyUrl, Boolean.class);
-
-                assert result != null;
-                if (!result) {
+                boolean accessToken = verifyTokenService.verifyToken(token, "ACCESS_TOKEN");
+                if (!accessToken) {
                     return error(exchange.getResponse(), url, "Token invalid");
                 }
 

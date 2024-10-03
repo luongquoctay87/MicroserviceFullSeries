@@ -14,5 +14,5 @@ public interface JwtService {
 
     String extractUsername(String token, TokenType type);
 
-    boolean isValid(String token, TokenType type, String username);
+    boolean isVerifyToken(String token, TokenType type);
 }

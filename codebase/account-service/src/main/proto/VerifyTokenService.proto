@@ -1,0 +1,18 @@
+syntax = "proto3";
+option java_multiple_files = true;
+package vn.tayjava.grpcserver;
+
+
+service VerifyTokenService {
+  rpc isVerifyToken(VerifyRequest) returns (VerifyResponse);
+}
+
+message VerifyRequest {
+  string token = 1;
+  string type = 2;
+}
+
+message VerifyResponse {
+  bool result = 1;
+  string message = 2;
+}

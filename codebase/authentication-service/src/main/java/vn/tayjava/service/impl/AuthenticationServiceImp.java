@@ -1,5 +1,7 @@
 package vn.tayjava.service.impl;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import vn.tayjava.controller.request.LoginRequest;
 import vn.tayjava.controller.response.TokenResponse;
 import vn.tayjava.exception.InvalidDataException;
+import vn.tayjava.exception.UnauthorizedException;
 import vn.tayjava.model.RedisToken;
 import vn.tayjava.repository.TokenRepository;
 import vn.tayjava.repository.UserRepository;
@@ -19,7 +22,6 @@ import vn.tayjava.service.JwtService;
 import java.util.List;
 
 import static org.springframework.http.HttpHeaders.REFERER;
-import static vn.tayjava.common.TokenType.ACCESS_TOKEN;
 import static vn.tayjava.common.TokenType.REFRESH_TOKEN;
 
 @Service
@@ -67,18 +69,23 @@ public class AuthenticationServiceImp implements AuthenticationService {
     }
 
     @Override
-    public TokenResponse createRefreshToken(HttpServletRequest request) {
+    public TokenResponse createRefreshToken(HttpServletRequest request) throws InvalidDataException {
         final String refreshToken = request.getHeader(REFERER);
 
         if (StringUtils.isBlank(refreshToken)) {
-            throw new InvalidDataException("Token must be not blank");
+            throw new UnauthorizedException("Token must be not blank");
         }
 
-        final String userName = jwtService.extractUsername(refreshToken, REFRESH_TOKEN);
-        var user = userRepository.findByUsername(userName);
+        final String userName;
+        try {
+            userName = jwtService.extractUsername(refreshToken, REFRESH_TOKEN);
+        } catch (ExpiredJwtException | SignatureException e) {
+            throw new UnauthorizedException(e.getMessage());
+        }
 
-        if (!jwtService.isValid(refreshToken, REFRESH_TOKEN, user.getUsername())) {
-            throw new InvalidDataException("Not allow access with this token");
+        var user = userRepository.findByUsername(userName);
+        if (!jwtService.isVerifyToken(refreshToken, REFRESH_TOKEN) || user == null) {
+            throw new UnauthorizedException("Not allow access with this token");
         }
 
         // generate access token
@@ -88,17 +95,5 @@ public class AuthenticationServiceImp implements AuthenticationService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
-    }
-
-    @Override
-    public Boolean verifyToken(String token) {
-        try {
-            final String userName = jwtService.extractUsername(token, ACCESS_TOKEN);
-            var user = userRepository.findByUsername(userName);
-
-            return jwtService.isValid(token, ACCESS_TOKEN, user.getUsername());
-        } catch (Exception e) {
-            return false;
-        }
     }
 }

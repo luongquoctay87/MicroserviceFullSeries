@@ -1,16 +1,16 @@
 package vn.tayjava.service.impl;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import vn.tayjava.common.TokenType;
 import vn.tayjava.exception.InvalidDataException;
+import vn.tayjava.exception.UnauthorizedException;
 import vn.tayjava.service.JwtService;
 
 import java.security.Key;
@@ -63,10 +63,15 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public boolean isValid(String token, TokenType type, String username) {
-        log.info("---------- isValid ----------");
-        final String user = extractUsername(token, type);
-        return (user.equals(username) && !isTokenExpired(token, type));
+    public boolean isVerifyToken(String token, TokenType type) {
+        log.info("---------- isVerifyToken ----------");
+        try {
+            extractUsername(token, type);
+            return !isTokenExpired(token, type);
+        } catch (ExpiredJwtException | SignatureException e) {
+            log.error(e.getMessage());
+            return false;
+        }
     }
 
     private String generateToken(Map<String, Object> claims, String username) {
@@ -105,6 +110,10 @@ public class JwtServiceImpl implements JwtService {
 
     }
 
+    private boolean isTokenExpired(String token, TokenType type) {
+        return extractExpiration(token, type).before(new Date());
+    }
+
     private <T> T extractClaim(String token, TokenType type, Function<Claims, T> claimResolver) {
         final Claims claims = extraAllClaim(token, type);
         return claimResolver.apply(claims);
@@ -112,10 +121,6 @@ public class JwtServiceImpl implements JwtService {
 
     private Claims extraAllClaim(String token, TokenType type) {
         return Jwts.parserBuilder().setSigningKey(getKey(type)).build().parseClaimsJws(token).getBody();
-    }
-
-    private boolean isTokenExpired(String token, TokenType type) {
-        return extractExpiration(token, type).before(new Date());
     }
 
     private Date extractExpiration(String token, TokenType type) {
