@@ -11,7 +11,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Service;
 import vn.tayjava.controller.request.LoginRequest;
 import vn.tayjava.controller.response.TokenResponse;
-import vn.tayjava.exception.InvalidDataException;
 import vn.tayjava.exception.UnauthorizedException;
 import vn.tayjava.model.RedisToken;
 import vn.tayjava.repository.TokenRepository;
@@ -69,7 +68,7 @@ public class AuthenticationServiceImp implements AuthenticationService {
     }
 
     @Override
-    public TokenResponse createRefreshToken(HttpServletRequest request) throws InvalidDataException {
+    public TokenResponse createRefreshToken(HttpServletRequest request) {
         final String refreshToken = request.getHeader(REFERER);
 
         if (StringUtils.isBlank(refreshToken)) {
@@ -84,7 +83,7 @@ public class AuthenticationServiceImp implements AuthenticationService {
         }
 
         var user = userRepository.findByUsername(userName);
-        if (!jwtService.isVerifyToken(refreshToken, REFRESH_TOKEN) || user == null) {
+        if (user == null) {
             throw new UnauthorizedException("Not allow access with this token");
         }
 

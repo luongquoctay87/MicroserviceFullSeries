@@ -1,4 +1,4 @@
-package vn.tayjava.exception;
+package vn.tayjava.controller.response;
 
 import lombok.Getter;
 import lombok.Setter;

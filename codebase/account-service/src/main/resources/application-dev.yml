@@ -24,16 +24,3 @@ openapi:
     server: ${HOST_NAME:http://localhost}:4953/account
     title: Account service
     version: 1.0.0
-
-grpc:
-  client:
-    hello-service:
-      address: localhost:9091
-      enableKeepAlive: true
-      keepAliveWithoutCalls: true
-      negotiationType: plaintext
-    verify-token-service:
-      address: localhost:9091
-      enableKeepAlive: true
-      keepAliveWithoutCalls: true
-      negotiationType: plaintext

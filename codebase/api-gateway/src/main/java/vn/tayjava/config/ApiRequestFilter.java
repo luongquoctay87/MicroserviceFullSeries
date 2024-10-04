@@ -1,9 +1,7 @@
 package vn.tayjava.config;
 
 import com.google.gson.Gson;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -13,6 +11,7 @@ import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import reactor.core.publisher.Mono;
+import vn.tayjava.grpcserver.VerifyResponse;
 import vn.tayjava.service.VerifyTokenService;
 
 import java.nio.charset.StandardCharsets;
@@ -32,8 +31,6 @@ public class ApiRequestFilter extends AbstractGatewayFilterFactory<ApiRequestFil
         this.verifyTokenService = verifyTokenService;
     }
 
-    private List<String> permitUrls = List.of("/access-token", "/user/register");
-
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
@@ -41,7 +38,7 @@ public class ApiRequestFilter extends AbstractGatewayFilterFactory<ApiRequestFil
             String url = request.getPath().toString();
             log.info("-------------[ {} ]", url);
 
-            if (permitUrls.contains(url)) {
+            if (isWhiteListURL(url)) {
                 return chain.filter(exchange).then(Mono.fromRunnable(() -> {
                 }));
             }
@@ -59,24 +56,12 @@ public class ApiRequestFilter extends AbstractGatewayFilterFactory<ApiRequestFil
                 // authentication
                 final String token = request.getHeaders().getOrEmpty("Authorization").get(0).substring(7);
 
-//                // TODO sau nay se goi bang gRPC
-//                String verifyUrl = String.format("http://localhost:8081/verify-token?token=%s", token);
-//
-//                Boolean result = restTemplate.getForObject(verifyUrl, Boolean.class);
-//
-//                assert result != null;
-//                if (!result) {
-//                    return error(exchange.getResponse(), url, "Token invalid");
-//                }
-
-                boolean accessToken = verifyTokenService.verifyToken(token, "ACCESS_TOKEN");
-                if (!accessToken) {
-                    return error(exchange.getResponse(), url, "Token invalid");
+                VerifyResponse verifyToken = verifyTokenService.verifyToken(token);
+                if (!verifyToken.getIsVerified()) {
+                    return error(exchange.getResponse(), url, verifyToken.getMessage());
                 }
 
-                // Authorization
-                // 1. TODO decode token lay id role cua user
-                // 2. check user co quyen access cai url nay khong (permission)
+                // TODO authorization
 
                 log.info("Request valid");
                 return chain.filter(exchange).then(Mono.fromRunnable(() -> {
@@ -102,6 +87,18 @@ public class ApiRequestFilter extends AbstractGatewayFilterFactory<ApiRequestFil
         response.setStatusCode(HttpStatus.OK);
 
         return response.writeWith(Mono.just(buffer));
+    }
+
+    /**
+     * White list for access app without token
+     * @return
+     */
+    private boolean isWhiteListURL(String url) {
+        List<String> permitUrls = new LinkedList<>();
+        permitUrls.add("/access-token");
+        permitUrls.add("/refresh-token");
+
+        return permitUrls.contains(url);
     }
 
     public static class Config {

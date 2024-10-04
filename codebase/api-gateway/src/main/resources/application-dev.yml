@@ -76,7 +76,7 @@ redis:
 grpc:
   client:
     verify-token-service:
-      address: localhost:9091
+      address: static://localhost:9091
       enableKeepAlive: true
       keepAliveWithoutCalls: true
       negotiationType: plaintext
