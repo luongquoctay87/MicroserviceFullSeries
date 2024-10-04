@@ -1,16 +1,16 @@
 package vn.tayjava.service.impl;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import vn.tayjava.common.TokenType;
 import vn.tayjava.exception.InvalidDataException;
-import vn.tayjava.grpcserver.VerifyResponse;
 import vn.tayjava.service.JwtService;
 
 import java.security.Key;

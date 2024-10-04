@@ -38,7 +38,7 @@ public class ApiRequestFilter extends AbstractGatewayFilterFactory<ApiRequestFil
             String url = request.getPath().toString();
             log.info("-------------[ {} ]", url);
 
-            if (isWhiteListURL(url)) {
+            if (isWhiteListURL(url) || url.contains("/v3/api-docs/")) {
                 return chain.filter(exchange).then(Mono.fromRunnable(() -> {
                 }));
             }
@@ -67,6 +67,7 @@ public class ApiRequestFilter extends AbstractGatewayFilterFactory<ApiRequestFil
                 return chain.filter(exchange).then(Mono.fromRunnable(() -> {
                 }));
             } else {
+                log.info("Request not valid, URL={}", url);
                 return error(exchange.getResponse(), url, "Request invalid, Please try again!");
             }
         };
