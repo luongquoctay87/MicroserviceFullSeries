@@ -20,6 +20,7 @@ public record AuthenticationController(AuthenticationService authenticationServi
 
     @Operation(summary = "Access Token", description = "Generate access token")
     @PostMapping("/access-token")
+    @ResponseStatus(OK)
     public ResponseEntity<TokenResponse> accessToken(@RequestBody LoginRequest request) {
         log.info("POST /access-token");
         return new ResponseEntity<>(authenticationService.createAccessToken(request), OK);
@@ -27,6 +28,7 @@ public record AuthenticationController(AuthenticationService authenticationServi
 
     @Operation(summary = "Refresh Token", description = "Generate refresh token")
     @PostMapping("/refresh-token")
+    @ResponseStatus(OK)
     public ResponseEntity<TokenResponse> refreshToken(HttpServletRequest request) {
         log.info("POST /refresh-token");
         return new ResponseEntity<>(authenticationService.createRefreshToken(request), OK);

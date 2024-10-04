@@ -1,11 +1,14 @@
 package vn.tayjava.service.grpc;
 
 import io.grpc.stub.StreamObserver;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.stereotype.Service;
 import vn.tayjava.common.TokenType;
+import vn.tayjava.exception.UnauthorizedException;
 import vn.tayjava.grpcserver.VerifyRequest;
 import vn.tayjava.grpcserver.VerifyResponse;
 import vn.tayjava.grpcserver.VerifyTokenServiceGrpc;
@@ -23,23 +26,20 @@ public class VerifyServiceImpl extends VerifyTokenServiceGrpc.VerifyTokenService
     private final JwtService jwtService;
 
     @Override
-    public void isVerifyToken(VerifyRequest request, StreamObserver<VerifyResponse> responseObserver) {
-        log.info("-----[ isVerifyToken ]-----");
-
-        boolean result = false;
-        String message = "";
+    public void verifyAccessToken(VerifyRequest request, StreamObserver<VerifyResponse> responseObserver) {
+        log.info("-----[ verifyToken ]-----");
+        VerifyResponse response;
         try {
-            TokenType type = TokenType.valueOf(request.getType());
-            result = jwtService.isVerifyToken(request.getToken(), type);
-            if (!result){
-                message = "Token is invalid";
-            }
+            jwtService.extractUsername(request.getToken(), TokenType.ACCESS_TOKEN);
+            response = VerifyResponse.newBuilder().setIsVerified(true).setMessage("Token is valid").build();
         } catch (IllegalArgumentException e) {
-            log.error(e.getMessage());
-            message = e.getMessage();
+            response = VerifyResponse.newBuilder().setIsVerified(false).setMessage(e.getMessage()).build();
+        } catch (ExpiredJwtException | SignatureException ex) {
+            response = VerifyResponse.newBuilder().setIsVerified(false).setMessage(ex.getMessage()).build();
         }
-        VerifyResponse response = VerifyResponse.newBuilder().setResult(result).setMessage(message).build();
+
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
 }
+

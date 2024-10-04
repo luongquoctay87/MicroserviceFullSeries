@@ -26,6 +26,6 @@ springdoc:
 openapi:
   service:
     api-docs: notification-service
-    server: ${API_GATEWAY:http://localhost:4953}/account
+    server: ${API_GATEWAY:http://localhost:4953}/notification
     title: Notification service
     version: 1.0.0

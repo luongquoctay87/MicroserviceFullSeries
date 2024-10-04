@@ -1,16 +1,16 @@
 package vn.tayjava.service.impl;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import vn.tayjava.common.TokenType;
 import vn.tayjava.exception.InvalidDataException;
-import vn.tayjava.exception.UnauthorizedException;
 import vn.tayjava.service.JwtService;
 
 import java.security.Key;
@@ -60,18 +60,6 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public String extractUsername(String token, TokenType type) {
         return extractClaim(token, type, Claims::getSubject);
-    }
-
-    @Override
-    public boolean isVerifyToken(String token, TokenType type) {
-        log.info("---------- isVerifyToken ----------");
-        try {
-            extractUsername(token, type);
-            return !isTokenExpired(token, type);
-        } catch (ExpiredJwtException | SignatureException e) {
-            log.error(e.getMessage());
-            return false;
-        }
     }
 
     private String generateToken(Map<String, Object> claims, String username) {

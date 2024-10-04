@@ -61,8 +61,6 @@ services:
     build:
       context: ./api-gateway
       dockerfile: Dockerfile
-    environment:
-      HOST_NAME: host.docker.internal
     ports:
       - '4953:4953'
     networks:
@@ -74,7 +72,7 @@ services:
       context: ./authentication-service
       dockerfile: Dockerfile
     environment:
-      HOST_NAME: host.docker.internal
+      API_GATEWAY: http://localhost:4953
     ports:
       - '8081:8081'
     networks:
@@ -86,7 +84,7 @@ services:
       context: ./account-service
       dockerfile: Dockerfile
     environment:
-      HOST_NAME: host.docker.internal
+      API_GATEWAY: http://localhost:4953
     ports:
       - '8082:8082'
     networks:
@@ -98,7 +96,7 @@ services:
       context: ./product-service
       dockerfile: Dockerfile
     environment:
-      HOST_NAME: host.docker.internal
+      API_GATEWAY: http://localhost:4953
     ports:
       - '8083:8083'
     networks:
@@ -110,7 +108,7 @@ services:
       context: ./order-service
       dockerfile: Dockerfile
     environment:
-      HOST_NAME: host.docker.internal
+      API_GATEWAY: http://localhost:4953
     ports:
       - '8084:8084'
     networks:
@@ -132,7 +130,7 @@ services:
       context: ./inventory-service
       dockerfile: Dockerfile
     environment:
-      HOST_NAME: host.docker.internal
+      API_GATEWAY: http://localhost:4953
     ports:
       - '8086:8086'
     networks:
@@ -144,7 +142,7 @@ services:
       context: ./mail-service
       dockerfile: Dockerfile
     environment:
-      HOST_NAME: host.docker.internal
+      API_GATEWAY: http://localhost:4953
     ports:
       - '8087:8087'
     networks:
@@ -156,7 +154,7 @@ services:
       context: ./notification-service
       dockerfile: Dockerfile
     environment:
-      HOST_NAME: host.docker.internal
+      API_GATEWAY: http://localhost:4953
     ports:
       - '8088:8088'
     networks:
