@@ -24,6 +24,6 @@ springdoc:
 openapi:
   service:
     api-docs: account-service
-    server: ${HOST_NAME:http://localhost}:4953/account
+    server: http://localhost:8082
     title: Account service
     version: 1.0.0

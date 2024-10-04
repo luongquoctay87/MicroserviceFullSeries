@@ -4,7 +4,6 @@ import vn.tayjava.controller.request.PwdChangeRequestDTO;
 import vn.tayjava.controller.request.UserCreationRequestDTO;
 import vn.tayjava.controller.request.UserUpdateDTO;
 import vn.tayjava.controller.response.UserResponseDTO;
-import vn.tayjava.model.User;
 
 import java.util.List;
 
@@ -20,5 +19,5 @@ public interface AccountService {
 
     UserResponseDTO getUserDetails(long userId);
 
-    List<UserResponseDTO> getUsers();
+    List<UserResponseDTO> getUsers(int page, int size, String sort);
 }
