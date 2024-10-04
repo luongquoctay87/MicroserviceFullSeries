@@ -22,12 +22,10 @@ import java.util.*;
 @Slf4j
 public class ApiRequestFilter extends AbstractGatewayFilterFactory<ApiRequestFilter.Config> {
 
-    private final RestTemplate restTemplate;
     private final VerifyTokenService verifyTokenService;
 
-    public ApiRequestFilter(RestTemplate restTemplate, VerifyTokenService verifyTokenService) {
+    public ApiRequestFilter(VerifyTokenService verifyTokenService) {
         super(Config.class);
-        this.restTemplate = restTemplate;
         this.verifyTokenService = verifyTokenService;
     }
 

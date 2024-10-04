@@ -20,8 +20,4 @@ public class ApiGatewayApplication {
         return "Welcome to Tây Java";
     }
 
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
 }
