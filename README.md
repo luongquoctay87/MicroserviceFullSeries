@@ -1,434 +1,264 @@
-# gRPC in Microservice
+# Product Service
+## I. Tổng quan về Elasticsearch
+Elasticsearch là một công cụ tìm kiếm và phân tích phân tán mã nguồn mở dựa trên thư viện Apache Lucene. Nó được phát triển để cung cấp khả năng tìm kiếm nhanh chóng, mở rộng và phân tích dữ liệu phi cấu trúc.
 
-### 1. gRPC là gì ?
-gRPC là một framework mã nguồn mở được phát triển bởi Google dựa trên mô hình gọi thủ tục từ xa (Remote Procedure Call - RPC). Nó được thiết kế để hỗ trợ giao tiếp giữa các ứng dụng phân tán trong môi trường mạng.
+Elasticsearch hiện nay là một trong những công cụ mạnh mẽ và phổ biến nhất cho việc tìm kiếm và phân tích dữ liệu phi cấu trúc, được sử dụng trong nhiều ngành công nghiệp và lĩnh vực khác nhau.
 
-#### 1.1 Giao thức nền tảng: HTTP/2
-gRPC sử dụng HTTP/2 thay vì HTTP/1.1 để truyền dữ liệu giữa client và `server`. HTTP/2 mang lại nhiều lợi thế
-- **Multiplexing**: HTTP/2 cho phép nhiều luồng dữ liệu được truyền đồng thời qua một kết nối TCP duy nhất, giúp giảm độ trễ và tăng hiệu suất.
-- **Header compression**: HTTP/2 hỗ trợ nén các tiêu đề HTTP, giúp giảm kích thước dữ liệu truyền đi.
-- **Streaming**: gRPC sử dụng tính năng này của HTTP/2 để truyền tải dữ liệu liên tục (stream) giữa client và `server`.
-- **Bảo mật**: HTTP/2 thường yêu cầu bảo mật thông qua TLS, đảm bảo rằng dữ liệu được truyền qua mạng an toàn.
+### 1. Cấu trúc dữ liệu cơ bản
+- Document: Đơn vị dữ liệu cơ bản trong Elasticsearch, là một đối tượng JSON đại diện cho một bản ghi.
+- Index: Một tập hợp các document có cùng loại, tương tự như một cơ sở dữ liệu trong RDBMS (Relational Database Management System).
+- Shard: Elasticsearch chia index thành nhiều shard để lưu trữ và truy vấn song song. Mỗi shard là một phần của dữ liệu và có thể nằm trên các nút khác nhau trong một cụm (cluster).
+- Replica: Là bản sao của các shard chính (primary shards), giúp tăng độ tin cậy và khả năng chịu lỗi.
 
-#### 1.2 ProtoBuf (Protocol Buffers)
-ProtoBuf là ngôn ngữ định nghĩa giao thức được sử dụng trong gRPC để serialization và deserialization. 
+### 2. Tính năng chính
+- Tìm kiếm và phân tích: Elasticsearch có khả năng tìm kiếm toàn văn bản (full-text search) mạnh mẽ với tốc độ cao, có thể hỗ trợ truy vấn phức tạp như lọc, sắp xếp và phân tích dữ liệu.
+- Phân tán (Distributed): Elasticsearch có thể dễ dàng mở rộng quy mô theo chiều ngang, phân tán dữ liệu và xử lý song song qua nhiều máy chủ khác nhau trong cụm.
+- Thời gian thực gần (Near real-time): Cập nhật dữ liệu nhanh chóng và phản hồi các thay đổi ngay lập tức với độ trễ nhỏ.
+- RESTful API: Elasticsearch tương tác chủ yếu qua giao diện RESTful API cho phép các ứng dụng có thể truy vấn và thao tác dữ liệu dễ dàng bằng cách gửi yêu cầu HTTP.
 
-ProtoBuf có các ưu điểm sau:
-- **Tối ưu về kích thước và hiệu suất**: Dữ liệu được mã hóa dưới dạng nhị phân nhỏ gọn, nhanh hơn so với các định dạng như JSON hay XML.
-- **Ngôn ngữ định nghĩa dịch vụ**: Bạn sử dụng một tệp .proto để định nghĩa các phương thức dịch vụ và các message dữ liệu được trao đổi giữa client và `server`.
-- **Hỗ trợ nhiều ngôn ngữ**: ProtoBuf có thể tạo mã cho nhiều ngôn ngữ lập trình khác nhau (Java, C++, Go, Python, Ruby, C#, v.v.), giúp dễ dàng tích hợp trong môi trường đa nền tảng.
+### 3. Các trường hợp sử dụng (Use cases)
+- Tìm kiếm trong ứng dụng: Elasticsearch có thể được sử dụng để xây dựng các chức năng tìm kiếm trong website hoặc ứng dụng với hiệu suất cao.
+- Log và phân tích dữ liệu: Phối hợp với các công cụ như Logstash và Kibana (trong Elastic Stack), Elasticsearch được sử dụng rộng rãi trong việc thu thập và phân tích log từ các hệ thống khác nhau.
+- Phân tích dữ liệu thời gian thực: Khả năng xử lý dữ liệu thời gian thực của Elasticsearch giúp nó phù hợp trong việc giám sát hệ thống, phân tích hành vi người dùng hoặc xử lý dữ liệu IoT.
 
-Ví dụ định nghĩa file `.proto`
-```text
-syntax = "proto3";
+### 4. Cách hoạt động
+- Indexing: Khi dữ liệu được thêm vào Elasticsearch nó sẽ được lập chỉ mục (index) giúp cho các truy vấn tìm kiếm nhanh chóng và hiệu quả.
+- Search: Elasticsearch sử dụng các chỉ số đảo ngược (inverted index) để tìm kiếm nhanh chóng trong văn bản. Inverted index giúp xác định vị trí các từ khóa trong các document một cách nhanh chóng.
+- Aggregations: Ngoài việc tìm kiếm Elasticsearch còn hỗ trợ các phép tính toán, phân nhóm và phân tích trên dữ liệu lớn, giúp người dùng hiểu rõ hơn về dữ liệu của mình.
 
-service HelloService {
-  rpc SayHello (HelloRequest) returns (HelloResponse);
-}
+### 5. Elastic Stack (ELK Stack)
+Elasticsearch là trung tâm của bộ Elastic Stack (ELK), gồm:
+- Logstash: Dùng để thu thập, xử lý và truyền tải dữ liệu đến Elasticsearch.
+- Kibana: Giao diện trực quan để hiển thị và phân tích dữ liệu trong Elasticsearch.
+- Beats: Các agent nhẹ được sử dụng để gửi dữ liệu từ các máy chủ, hệ thống đến Elasticsearch.
 
-message HelloRequest {
-  string firstName = 1;
-  string lastName = 2;
-}
+### 6. Cài đặt Elasticsearch
+[Installing Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/install-elasticsearch.html)
 
-message HelloResponse {
-  string message = 1;
-}
+## II. Tích hợp Elasticsearch, Postgres vào Product service
+- PostgreSQL sẽ quản lý dữ liệu có cấu trúc và cung cấp khả năng truy vấn cơ bản thông qua JPA.
+- Elasticsearch sẽ giúp bạn cung cấp khả năng tìm kiếm toàn văn (full-text search) và phân tích dữ liệu một cách nhanh chóng.
+
+### 1. Dựng database Elasticsearch với docker
+```yml
+  elastic-search:
+    image: elasticsearch:7.14.1
+    container_name: elasticsearch
+    restart: always
+    ports:
+      - "9200:9200"
+    environment:
+      - discovery.type=single-node
 ```
+**Note:** để thiết lập authentication(username/password) cho elasticsearch: https://www.elastic.co/guide/en/elasticsearch/reference/7.14/security-minimal-setup.html
 
-#### 1.3 Các phương pháp gọi gRPC
-gRPC hỗ trợ nhiều cách gọi thủ tục khác nhau phù hợp với các kịch bản sử dụng đa dạng
+### 2. Cấu hình Elasticsearch trong Spring Boot
 
-- Unary RPC: `Client` gửi một yêu cầu duy nhất và nhận lại một phản hồi duy nhất từ `server`, Đây là kiểu đơn giản nhất giống như hàm đồng bộ.
-
-![unary-rpc.png](gallery/unary-rpc.png)
-
-- Server Streaming RPC: `Client` gửi một yêu cầu và `server` trả về một luồng nhiều phản hồi (stream) mà không cần yêu cầu bổ sung từ `client`.
-
-![server-streaming-rpc.png](gallery/server-streaming-rpc.png)
-
-- Client Streaming RPC: `Client` gửi nhiều yêu cầu (stream) và `server` trả về một phản hồi sau khi nhận xong tất cả yêu cầu
-
-![client-streaming-rpc.png](gallery/client-streaming-rpc.png)
-
-- Bidirectional Streaming RPC: Cả client và server đều có thể gửi nhiều message qua lại trong luồng. Hai bên có thể truyền và nhận dữ liệu liên tục mà không cần chờ đợi toàn bộ yêu cầu hoặc phản hồi.
-
-![bidirectional-streaming-rpc.png](gallery/bidirectional-streaming-rpc.png)
-
-#### 1.4. Kiến trúc gRPC
-
-![grpc-architecture.png](gallery/grpc-architecture.png)
-
-- **Stub (Client)**: Phía `client` sử dụng một đối tượng gọi là stub để thực hiện các cuộc gọi RPC. Stub là một đại diện của dịch vụ trên `server` giúp `client` gửi các yêu cầu tới `server` thông qua giao diện `gRPC`.
-- **Server**: `Server` triển khai dịch vụ được định nghĩa trong file `.proto`. Khi nhận yêu cầu từ `client` thì `server` thực hiện các hành động tương ứng và trả về kết quả.
-- **Channel**: Là kênh kết nối giữa `client` và `server` thực hiện giao tiếp thông qua `HTTP/2.` Channel được bảo mật bởi TLS nếu cần.
-
-#### 1.5 Streaming trong gRPC
-`Streaming` là một trong những tính năng mạnh mẽ nhất của `gRPC`. Nó cho phép truyền dữ liệu lớn hoặc liên tục giữa máy khách và máy chủ mà không cần đóng kết nối. Các kiểu stream phổ biến:
-- **Server streaming**: Máy chủ trả về một chuỗi dữ liệu liên tục cho một yêu cầu đơn lẻ.
-- **Client streaming**: Máy khách gửi dữ liệu liên tục đến máy chủ trong một kết nối duy nhất.
-- **Bidirectional streaming**: Cả hai bên gửi và nhận dữ liệu đồng thời qua một kết nối duy nhất. Streaming giúp gRPC thích hợp cho các ứng dụng như chat, video streaming hoặc bất kỳ dịch vụ nào yêu cầu trao đổi dữ liệu liên tục trong thời gian thực.
-
-#### 1.6 Bảo mật trong gRPC
-gRPC tích hợp chặt chẽ với TLS để cung cấp bảo mật giao tiếp giữa `client` và `server`. Nó có một số điểm nổi bật về bảo mật của gRPC:
-
-- **TLS/SSL**: gRPC hỗ trợ mã hóa dữ liệu truyền tải qua TLS, đảm bảo tính bảo mật và riêng tư.
-- **Xác thực (Authentication)**: gRPC cung cấp nhiều cơ chế xác thực `client` và `server` từ cơ chế dựa trên chứng chỉ TLS đến xác thực thông qua token JWT hoặc OAuth2.
-
-#### 1.7 Ưu điểm của gRPC
-- **gRPC** rất phù hợp với kiến trúc microservices vì hiệu suất cao, khả năng tương thích đa ngôn ngữ và các tính năng như streaming và bảo mật. Trong các hệ thống microservices các microservice giao tiếp với nhau thông qua gRPC để giảm độ trễ và tăng hiệu quả xử lý.
-- **gRPC** dễ dàng tích hợp với các công nghệ quản lý hệ thống như Kubernetes hoặc Docker. Trong môi trường sản xuất, các công cụ như Envoy hoặc Istio có thể được sử dụng để quản lý và tối ưu hóa giao tiếp gRPC giữa các dịch vụ.
-
-### 2. Demo sample call-gRPC trong microservice
-![sample-call-grpc.png](gallery/sample-call-grpc.png)
-
-#### 2.1 Build gRPC server tại Authentication-service
-- Bước 1: thêm các dependency sau vào `pom.xml`
+**a. Thêm dependency cho Elasticsearch**
 ```xml
-<properties>
-  <grpc.version>1.68.0</grpc.version>
-  <protoc.version>3.21.12</protoc.version>
-</properties>
-
-<dependencies>
-  <dependency>
-      <groupId>io.grpc</groupId>
-      <artifactId>grpc-netty</artifactId>
-      <version>${grpc.version}</version>
-  </dependency>
-  <dependency>
-      <groupId>io.grpc</groupId>
-      <artifactId>grpc-protobuf</artifactId>
-      <version>${grpc.version}</version>
-  </dependency>
-  <dependency>
-      <groupId>io.grpc</groupId>
-      <artifactId>grpc-stub</artifactId>
-      <version>${grpc.version}</version>
-  </dependency>
-  <dependency>
-      <groupId>net.devh</groupId>
-      <artifactId>grpc-server-spring-boot-starter</artifactId>
-      <version>3.1.0.RELEASE</version>
-  </dependency>
-  <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>2.17.2</version>
-  </dependency>
-  <dependency>
-      <groupId>javax.annotation</groupId>
-      <artifactId>javax.annotation-api</artifactId>
-      <version>1.3.2</version>
-  </dependency>
-    <!-- others -->
-</dependencies>
-```
-- Bước 2: cấu hình gRPC server
-  - application.yml
-  ```yml
-  grpc:
-    server:
-      port: 9091
-  ```
-
-  - AppConfig.java
-  ```java
-  @Bean
-  public GrpcAuthenticationReader grpcAuthenticationReader(){
-    return new BasicGrpcAuthenticationReader();
-  }
-  ```
-- Bước 3: tạo file `.proto`
-
-    - Tạo folder `proto` tại package `src.main`
-    - Tạo file `HelloService.proto` tạo folder `proto`
-    ```text
-    syntax = "proto3";
-    option java_multiple_files = true;
-    package vn.tayjava.grpcserver;
-    
-    
-    service HelloService {
-    rpc hello(HelloRequest) returns (HelloResponse);
-    }
-    
-    message HelloRequest {
-    string firstName = 1;
-    string lastName = 2;
-    }
-    
-    message HelloResponse {
-    string greeting = 1;
-    }
-    ```
-  
-- Bước 4: Generate ra gRPC service từ file HelloService.proto
-> Để compile thành công chúng ta cần thêm 1 số dependency để biên dịch file .proto ra file .class
-```xml
-<build>
-  <!-- Extension for build file .proto -->
-  <extensions>
-    <extension>
-      <groupId>kr.motd.maven</groupId>
-      <artifactId>os-maven-plugin</artifactId>
-      <version>1.6.1</version>
-    </extension>
-  </extensions>
-  <plugins>
-    <!-- other plugin -->
-    
-    <!-- Protocol compiler for build .proto -->
-    <plugin>
-      <groupId>org.xolstice.maven.plugins</groupId>
-      <artifactId>protobuf-maven-plugin</artifactId>
-      <version>0.6.1</version>
-      <configuration>
-        <protocArtifact>
-          com.google.protobuf:protoc:${protoc.version}:exe:${os.detected.classifier}
-        </protocArtifact>
-        <pluginId>grpc-java</pluginId>
-        <pluginArtifact>
-          io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}
-        </pluginArtifact>
-        <protoSourceRoot>
-          src/main/proto
-        </protoSourceRoot>
-      </configuration>
-      <executions>
-        <execution>
-          <goals>
-            <goal>compile</goal>
-            <goal>compile-custom</goal>
-          </goals>
-        </execution>
-      </executions>
-    </plugin>
-  </plugins>
-</build>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+</dependency>
 ```
 
-Biên dịch với maven extension
-```bash
-$ mvn clean compile 
+**b. Cấu hình kết nối trong application.properties hoặc application.yml**
+```properties
+spring.elasticsearch.uris=http://localhost:9200
+#spring.elasticsearch.username=elastic
+#spring.elasticsearch.password=changeme
 ```
+**Note:** Vì không thiết lập authentication cho nên không cần username/password
 
-Kết quả sau khi compile
-
-![protoc-generate.png](gallery/protoc-generate.png)
-
-- Bước 5: Tạo gRPC service tại package `vn.tayjava.service.grpc`
+**c. Tạo document và repository cho Elasticsearch**
+- ProductDocument
 ```java
-package vn.tayjava.service.grpc;
+@Getter
+@Setter
+@Document(indexName = "products")
+public class ProductDocument {
+    @Id
+    private String id;
 
-import io.grpc.stub.StreamObserver;
-import lombok.extern.slf4j.Slf4j;
-import net.devh.boot.grpc.server.service.GrpcService;
-import vn.tayjava.grpcserver.HelloRequest;
-import vn.tayjava.grpcserver.HelloResponse;
-import vn.tayjava.grpcserver.HelloServiceGrpc;
+    private String name;
+    private String description;
+    private double price;
+}
+```
 
-@GrpcService
-@Slf4j
-public class HelloServiceImpl extends HelloServiceGrpc.HelloServiceImplBase {
+- ProductSearchRepository
+```java
+@Repository
+public interface ProductSearchRepository extends ElasticsearchRepository<ProductDocument, String> {
+    List<ProductDocument> findByNameContaining(String name);
+}
+```
+
+### 2. Cấu hình Postgres trong Spring Boot
+**a. Thêm dependency cho PostgreSQL**
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+    <scope>runtime</scope>
+</dependency>
+```
+
+**b. Cấu hình kết nối trong application.properties hoặc application.yml**
+```yml
+spring:
+  datasource:
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${POSTGRES_USER:quoctay}
+    password: ${POSTGRES_PASSWORD:password}
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+```
+
+**c. Sử dụng JPA cho PostgreSQL**
+- Product
+```java
+@Getter
+@Setter
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "tbl_product")
+public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "price")
+    private double price;
+
+    @CreationTimestamp
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
+}
+```
+
+- ProductRepository
+```java
+@Repository
+public interface ProductRepository extends JpaRepository<Product, Long> {
+    List<Product> findByNameContaining(String name);
+}
+```
+
+### 3. Đồng bộ dữ liệu giữa PostgreSQL và Elasticsearch
+Chúng ta có thể thực hiện đồng bộ hóa dữ liệu giữa PostgreSQL và Elasticsearch bằng cách sử dụng một service để lưu dữ liệu vào cả hai hệ thống.
+
+```java
+@Service
+@RequiredArgsConstructor
+@Slf4j(topic = "PRODUCT-SERVICE")
+public class ProductServiceImpl implements ProductService {
+
+    private final ProductSearchRepository productSearchRepository;
+    private final ProductRepository productRepository;
 
     @Override
-    public void hello(HelloRequest request, StreamObserver<HelloResponse> responseObserver) {
-        log.info(request.toString());
+    @Transactional(rollbackFor = Exception.class)
+    public long addProduct(ProductCreationRequest request) {
+        log.info("Add product {}", request);
 
-        HelloResponse response = HelloResponse.newBuilder().setGreeting("Hello " + request.getFirstName() + " " + request.getLastName()).build();
-        responseObserver.onNext(response);
-        responseObserver.onCompleted();
+        Product product = new Product();
+        product.setName(request.getName());
+        product.setDescription(request.getDescription());
+        product.setPrice(request.getPrice());
+
+        productRepository.save(product);
+
+        if (product.getId() != null) {
+            ProductDocument productDocument = new ProductDocument();
+            productDocument.setName(request.getName());
+            productDocument.setDescription(request.getDescription());
+            productDocument.setPrice(request.getPrice());
+
+            productSearchRepository.save(productDocument);
+            log.info("Save productDocument", productDocument);
+        }
+
+        return product.getId();
+
+    }
+
+    @Override
+    public List<ProductDocument> searchProducts(String name) {
+        log.info("Search products by name {}", name);
+
+        List<ProductDocument> productDocuments = new ArrayList<>();
+
+        if (StringUtils.hasLength(name)) {
+            productDocuments = productSearchRepository.findByNameContaining(name);
+        } else {
+            Iterable<ProductDocument> documents = productSearchRepository.findAll();
+            for (ProductDocument productDocument : documents) {
+                productDocuments.add(productDocument);
+            }
+        }
+
+        return productDocuments;
     }
 }
 ```
-- Bước 6: Chạy authentication service
+
+## 4. Tích hợp Product Service vào api-gateway
+```yml
+spring:
+  config:
+    activate:
+      on-profile: dev
+  devtools:
+    add-properties: true
+  cloud:
+    gateway:
+      routes: # điều hướng request đến service tương ứng thông qua chỉ định trên url
+        - id: product-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/product/**, /v3/api-docs/product-service
+          filters:
+            - RewritePath=/product/(?<segment>.*), /product/$\{segment} # thay thế ký tự /product/ thành /
+```
+
+## 5. Test API
+- Add product
 ```bash
-$ ./mvnw spring-boot:run
-2024-10-01T11:01:32.747+07:00  INFO 48850 --- [authentication-service] [  restartedMain] n.d.b.g.s.s.AbstractGrpcServerFactory    : Registered gRPC service: vn.tayjava.grpcserver.HelloService, bean: helloServiceImpl, class: vn.tayjava.service.grpc.HelloServiceImpl
-2024-10-01T11:01:32.747+07:00  INFO 48850 --- [authentication-service] [  restartedMain] n.d.b.g.s.s.AbstractGrpcServerFactory    : Registered gRPC service: grpc.health.v1.Health, bean: grpcHealthService, class: io.grpc.protobuf.services.HealthServiceImpl
-2024-10-01T11:01:32.747+07:00  INFO 48850 --- [authentication-service] [  restartedMain] n.d.b.g.s.s.AbstractGrpcServerFactory    : Registered gRPC service: grpc.reflection.v1alpha.ServerReflection, bean: protoReflectionService, class: io.grpc.protobuf.services.ProtoReflectionService
-2024-10-01T11:01:32.748+07:00  INFO 48850 --- [authentication-service] [  restartedMain] n.d.b.g.s.s.GrpcServerLifecycle          : gRPC Server started, listening on address: in-process:auth-server, port: -1
-2024-10-01T11:01:32.758+07:00  INFO 48850 --- [authentication-service] [  restartedMain] v.t.AuthenticationServiceApplication     : Started AuthenticationServiceApplication in 2.556 seconds (process running for 2.704)
+curl --location 'http://localhost:8083/product/add' \
+--header 'accept: */*' \
+--header 'Content-Type: application/json' \
+--data '{
+  "name": "Hảo hảo",
+  "description": "Mì tôm quốc dân",
+  "price": 0
+}'
 ```
 
-- Bước 7: Test gRPC service bằng bloomRPC
-![bloomRPC-test.png](gallery/bloomRPC-test.png)
-
-
-#### 2.2 Build gRPC client tại Account-service
-- Bước 1: thêm các dependency sau vào `pom.xml`
-```xml
-<properties>
-  <grpc.version>1.68.0</grpc.version>
-  <protoc.version>3.21.12</protoc.version>
-</properties>
-
-<dependencies>
-<dependency>
-  <groupId>io.grpc</groupId>
-  <artifactId>grpc-netty</artifactId>
-  <version>${grpc.version}</version>
-</dependency>
-<dependency>
-  <groupId>io.grpc</groupId>
-  <artifactId>grpc-protobuf</artifactId>
-  <version>${grpc.version}</version>
-</dependency>
-<dependency>
-  <groupId>io.grpc</groupId>
-  <artifactId>grpc-stub</artifactId>
-  <version>${grpc.version}</version>
-</dependency>
-<dependency>
-  <groupId>net.devh</groupId>
-  <artifactId>grpc-client-spring-boot-starter</artifactId>
-  <version>3.1.0.RELEASE</version>
-</dependency>
-<dependency>
-  <groupId>com.fasterxml.jackson.core</groupId>
-  <artifactId>jackson-databind</artifactId>
-  <version>2.17.2</version>
-</dependency>
-<dependency>
-  <groupId>javax.annotation</groupId>
-  <artifactId>javax.annotation-api</artifactId>
-  <version>1.3.2</version>
-</dependency>
-<!-- others -->
-</dependencies>
-```
-
-- Bước 2: cấu hình gRPC client
-  - application.yml
-  ```yml
-  grpc:
-    client:
-      hello-service:
-        address: localhost:9091
-        enableKeepAlive: true
-        keepAliveWithoutCalls: true
-        negotiationType: plaintext
-  ```
-  
-- Bước 3: tạo file `.proto`
-
-  - Tạo folder `proto` tại package `src.main`
-  - Tạo file `HelloService.proto` tạo folder `proto`
-    ```text
-    syntax = "proto3";
-    option java_multiple_files = true;
-    package vn.tayjava.grpcserver;
-    
-    
-    service HelloService {
-    rpc hello(HelloRequest) returns (HelloResponse);
-    }
-    
-    message HelloRequest {
-    string firstName = 1;
-    string lastName = 2;
-    }
-    
-    message HelloResponse {
-    string greeting = 1;
-    }
-    ```
-
-- Bước 4: Generate ra gRPC service từ file HelloService.proto
-> Để compile thành công chúng ta cần thêm 1 số dependency để biên dịch file .proto ra file .class
-```xml
-<build>
-  <!-- Extension for build file .proto -->
-  <extensions>
-    <extension>
-      <groupId>kr.motd.maven</groupId>
-      <artifactId>os-maven-plugin</artifactId>
-      <version>1.6.1</version>
-    </extension>
-  </extensions>
-  <plugins>
-    <!-- other plugin -->
-    
-    <!-- Protocol compiler for build .proto -->
-    <plugin>
-      <groupId>org.xolstice.maven.plugins</groupId>
-      <artifactId>protobuf-maven-plugin</artifactId>
-      <version>0.6.1</version>
-      <configuration>
-        <protocArtifact>
-          com.google.protobuf:protoc:${protoc.version}:exe:${os.detected.classifier}
-        </protocArtifact>
-        <pluginId>grpc-java</pluginId>
-        <pluginArtifact>
-          io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}
-        </pluginArtifact>
-        <protoSourceRoot>
-          src/main/proto
-        </protoSourceRoot>
-      </configuration>
-      <executions>
-        <execution>
-          <goals>
-            <goal>compile</goal>
-            <goal>compile-custom</goal>
-          </goals>
-        </execution>
-      </executions>
-    </plugin>
-  </plugins>
-</build>
-```
-
-Biên dịch với maven extension
+- get product
 ```bash
-$ mvn clean compile 
+curl --location 'http://localhost:4953/product/list' \
+--header 'accept: */*'
 ```
-
-Kết quả sau khi compile
-
-![protoc-generate.png](gallery/protoc-generate.png)
-
-- Bước 5: Tạo kết nối đến Server với `@GrpcClient`
-```java
-package vn.tayjava.service.grpc;
-
-import lombok.extern.slf4j.Slf4j;
-import net.devh.boot.grpc.client.inject.GrpcClient;
-import org.springframework.stereotype.Service;
-import vn.tayjava.grpcserver.HelloRequest;
-import vn.tayjava.grpcserver.HelloResponse;
-import vn.tayjava.grpcserver.HelloServiceGrpc;
-
-@Service
-@Slf4j
-public class GrpcClientTest {
-
-  @GrpcClient("hello-service")
-  private HelloServiceGrpc.HelloServiceBlockingStub helloServiceBlockingStub;
-
-  public String testingGRPC() {
-    HelloRequest helloRequest = HelloRequest.newBuilder().setFirstName("Ong Tay").setLastName("Viet Nam").build();
-    HelloResponse response = helloServiceBlockingStub.hello(helloRequest);
-    log.info(response.getGreeting());
-
-    return response.getGreeting();
-  }
-}
-```
-
-- Bước 6: Chạy account service
-```bash
-$ ./mvnw spring-boot:run
-2024-10-01T11:15:37.868+07:00  INFO 50294 --- [account-service] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
-2024-10-01T11:15:37.877+07:00  INFO 50294 --- [account-service] [  restartedMain] vn.tayjava.AccountServiceApplication     : Started AccountServiceApplication in 1.062 seconds (process running for 1.203)
-```
-
-- Bước 7: Test gRPC service bằng call REST API
-```bash
-$ curl --location 'http://localhost:8082/user/test-grpc'
-Hello Ong Tay Viet Nam
-```
-
-### 3. Bài tập về nhà
-Call gRPC từ api-gateway đến authentication-service để verify-token
