@@ -1,5 +1,7 @@
 # Product Service
 ## I. Tổng quan về Elasticsearch
+![Elasticsearch Component.png](gallery/Elasticsearch%20Component.png)
+
 Elasticsearch là một công cụ tìm kiếm và phân tích phân tán mã nguồn mở dựa trên thư viện Apache Lucene. Nó được phát triển để cung cấp khả năng tìm kiếm nhanh chóng, mở rộng và phân tích dữ liệu phi cấu trúc.
 
 Elasticsearch hiện nay là một trong những công cụ mạnh mẽ và phổ biến nhất cho việc tìm kiếm và phân tích dữ liệu phi cấu trúc, được sử dụng trong nhiều ngành công nghiệp và lĩnh vực khác nhau.
