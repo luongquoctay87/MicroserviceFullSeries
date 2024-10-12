@@ -59,6 +59,8 @@ public class ApiRequestFilter extends AbstractGatewayFilterFactory<ApiRequestFil
                     return error(exchange.getResponse(), url, verifyToken.getMessage());
                 }
 
+                httpHeaders.add("userId", "10" );
+
                 // TODO authorization
 
                 log.info("Request valid");

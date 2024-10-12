@@ -1,8 +1,11 @@
 package vn.tayjava.config;
 
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,8 +21,8 @@ import java.util.List;
 public class SpringFoxConfig {
     @Bean
     public GroupedOpenApi publicApi(@Value("${openapi.service.api-docs}") String apiDocs) {
-        return org.springdoc.core.models.GroupedOpenApi.builder()
-                .group(apiDocs) // /v3/api-docs/account-service
+        return GroupedOpenApi.builder()
+                .group(apiDocs) // /v3/api-docs/product-service
                 .packagesToScan("vn.tayjava.controller")
                 .build();
     }
@@ -29,6 +32,7 @@ public class SpringFoxConfig {
             @Value("${openapi.service.title}") String title,
             @Value("${openapi.service.version}") String version,
             @Value("${openapi.service.server}") String serverUrl) {
+
         final String securitySchemeName = "bearerAuth";
 
         return new OpenAPI()
@@ -43,7 +47,7 @@ public class SpringFoxConfig {
                                                 .bearerFormat("JWT")))
                 .security(List.of(new SecurityRequirement().addList(securitySchemeName)))
                 .info(new Info().title(title)
-                        .description("API documents for Account Service")
+                        .description("API documents for Product Service")
                         .version(version)
                         .license(new License().name("Apache 2.0").url("https://springdoc.org")));
     }

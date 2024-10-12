@@ -25,6 +25,7 @@ springdoc:
 openapi:
   service:
     api-docs: product-service
-    server: http://localhost:${server.port}
+#    server: http://localhost:${server.port}
+    server: http://localhost:4953/product
     title: Product service
     version: 1.0.0

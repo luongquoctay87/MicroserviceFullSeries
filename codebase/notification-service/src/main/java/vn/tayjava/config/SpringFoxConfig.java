@@ -29,8 +29,19 @@ public class SpringFoxConfig {
             @Value("${openapi.service.title}") String title,
             @Value("${openapi.service.version}") String version,
             @Value("${openapi.service.server}") String serverUrl) {
+        final String securitySchemeName = "bearerAuth";
+
         return new OpenAPI()
                 .servers(List.of(new Server().url(serverUrl)))
+                .components(
+                        new Components()
+                                .addSecuritySchemes(
+                                        securitySchemeName,
+                                        new SecurityScheme()
+                                                .type(SecurityScheme.Type.HTTP)
+                                                .scheme("bearer")
+                                                .bearerFormat("JWT")))
+                .security(List.of(new SecurityRequirement().addList(securitySchemeName)))
                 .info(new Info().title(title)
                         .description("API documents for Notification service")
                         .version(version)

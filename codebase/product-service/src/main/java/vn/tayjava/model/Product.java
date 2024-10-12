@@ -31,6 +31,9 @@ public class Product {
     @Column(name = "price")
     private double price;
 
+    @Column(name = "user_id")
+    private int userId;
+
     @CreationTimestamp
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)

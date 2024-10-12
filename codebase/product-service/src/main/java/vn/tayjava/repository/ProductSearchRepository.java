@@ -7,6 +7,6 @@ import vn.tayjava.model.ProductDocument;
 import java.util.List;
 
 @Repository
-public interface ProductSearchRepository extends ElasticsearchRepository<ProductDocument, String> {
+public interface ProductSearchRepository extends ElasticsearchRepository<ProductDocument, Long> {
     List<ProductDocument> findByNameContaining(String name);
 }

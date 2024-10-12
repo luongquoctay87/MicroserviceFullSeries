@@ -98,10 +98,6 @@ public class JwtServiceImpl implements JwtService {
 
     }
 
-    private boolean isTokenExpired(String token, TokenType type) {
-        return extractExpiration(token, type).before(new Date());
-    }
-
     private <T> T extractClaim(String token, TokenType type, Function<Claims, T> claimResolver) {
         final Claims claims = extraAllClaim(token, type);
         return claimResolver.apply(claims);
@@ -109,9 +105,5 @@ public class JwtServiceImpl implements JwtService {
 
     private Claims extraAllClaim(String token, TokenType type) {
         return Jwts.parserBuilder().setSigningKey(getKey(type)).build().parseClaimsJws(token).getBody();
-    }
-
-    private Date extractExpiration(String token, TokenType type) {
-        return extractClaim(token, type, Claims::getExpiration);
     }
 }

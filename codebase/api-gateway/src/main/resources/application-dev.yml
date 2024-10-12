@@ -26,7 +26,8 @@ spring:
           predicates:
             - Path=/product/**, /v3/api-docs/product-service
           filters:
-            - RewritePath=/product/(?<segment>.*), /product/$\{segment} # thay thế ký tự /product/ thành /
+            - RewritePath=/product/(?<segment>.*), /$\{segment} # thay thế ký tự /product/ thành /
+            - ApiRequestFilter
         - id: order-service
           uri: http://localhost:8084
           predicates:
