@@ -38,6 +38,14 @@ services:
     environment:
       - discovery.type=single-node
 
+  mongo:
+    image: mongo:6-jammy
+    container_name: mongodb
+    ports:
+      - '27017:27017'
+    volumes:
+      - data:/data/db
+
 #
 #  zookeeper:
 #    image: confluentinc/cp-zookeeper:latest
@@ -185,3 +193,4 @@ networks:
 
 volumes:
   postgres:
+  data:
