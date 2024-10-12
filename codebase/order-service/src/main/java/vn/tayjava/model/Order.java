@@ -22,6 +22,10 @@ public class Order {
 
     private Long paymentId;
 
+    private int status;
+
+    private String statusName;
+
     private Date createdAt;
 
     private Date updatedAt;
