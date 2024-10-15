@@ -32,9 +32,8 @@ public class OrderServiceImpl implements OrderService {
         log.info("Add order request: {}", request);
 
         Order order = new Order();
-        order.setUserId(request.getUserId());
+        order.setUserId(request.getCustomerId());
         order.setTotalPrice(request.getTotalPrice());
-        order.setPaymentId(request.getPaymentId());
         order.setStatus(OrderStatus.NEW.getValue());
         order.setStatusName(OrderStatus.NEW.name());
         order.setCreatedAt(new Date());
@@ -44,7 +43,6 @@ public class OrderServiceImpl implements OrderService {
                 item -> OrderItem.builder()
                         .orderId(order.getId())
                         .productId(item.getProductId())
-                        .productName(item.getProductName())
                         .quantity(item.getQuantity())
                         .unit(item.getUnit())
                         .price(item.getPrice())

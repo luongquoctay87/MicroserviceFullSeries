@@ -22,3 +22,8 @@ openapi:
     server: http://localhost:${server.port}
     title: Order service
     version: 1.0.0
+
+aws:
+  region: us-west-2
+  dynamodb:
+    endpoint: http://localhost:8000
