@@ -1,7 +1,7 @@
 package vn.tayjava.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
 import software.amazon.awssdk.core.exception.SdkClientException;
@@ -17,15 +17,11 @@ import java.util.Map;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class DynamoDbService {
 
     private final DynamoDbClient dynamoDbClient;
     private final String tableName = "dev_order";
-
-    @Autowired
-    public DynamoDbService(DynamoDbClient dynamoDbClient) {
-        this.dynamoDbClient = dynamoDbClient;
-    }
 
     public void placeOrder(PlaceOrderRequest orderRequest) {
         log.info("Place order request: {}", orderRequest);
