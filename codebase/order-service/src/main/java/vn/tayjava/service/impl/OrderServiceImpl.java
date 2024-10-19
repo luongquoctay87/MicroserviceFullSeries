@@ -8,6 +8,8 @@ import com.google.zxing.oned.EAN13Writer;
 import com.google.zxing.qrcode.QRCodeWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import vn.tayjava.common.OrderStatus;
 import vn.tayjava.controller.request.PlaceOrderRequest;
@@ -26,6 +28,10 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
+    private final KafkaTemplate<String, String> kafkaTemplate;
+
+    @Value("${spring.kafka.topic}")
+    private String checkoutOrderTopic;
 
     @Override
     public String addOrder(PlaceOrderRequest request) {
@@ -97,6 +103,14 @@ public class OrderServiceImpl implements OrderService {
 
         // TODO push message to Kafka
         //Order order = orderRepository.findById(orderId).get();
+
+        String json = """
+                "orderId": 2,
+                "email": "someone@gmail.com",
+                "totalPrice": 1200000
+                """;
+
+        kafkaTemplate.send(checkoutOrderTopic, json);
 
         return "Processing";
     }

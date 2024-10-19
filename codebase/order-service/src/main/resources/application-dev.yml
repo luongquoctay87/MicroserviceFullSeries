@@ -9,6 +9,9 @@ spring:
       host: ${MONGODB_HOST:localhost}
       port: ${MONGODB_PORT:27017}
       database: ${MONGODB_DB:product_db}
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVER:localhost:29092}
+    topic: checkout-order-topic
 
 # API document setting
 springdoc:

@@ -43,7 +43,7 @@ public class OrderController {
         return ResponseEntity.ok(orderService.generateBarCodeImage(barcode));
     }
 
-    @PostMapping("/checkout/orderId")
+    @PostMapping("/checkout/{orderId}")
     public ResponseEntity<String> checkoutOrder(@PathVariable String orderId) {
         log.info("checkoutOrder request: {}", orderId);
         return ResponseEntity.ok(orderService.checkoutOrder(orderId));
