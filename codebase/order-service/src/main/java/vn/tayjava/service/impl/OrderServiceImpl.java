@@ -1,18 +1,25 @@
 package vn.tayjava.service.impl;
 
+import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.oned.EAN13Writer;
 import com.google.zxing.qrcode.QRCodeWriter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import vn.tayjava.common.OrderStatus;
 import vn.tayjava.controller.request.PlaceOrderRequest;
+import vn.tayjava.controller.request.PmtOrderMessage;
 import vn.tayjava.model.Order;
 import vn.tayjava.model.OrderItem;
 import vn.tayjava.repository.OrderRepository;
@@ -38,8 +45,10 @@ public class OrderServiceImpl implements OrderService {
         log.info("Add order request: {}", request);
 
         Order order = new Order();
-        order.setUserId(request.getCustomerId());
-        order.setTotalPrice(request.getTotalPrice());
+        order.setCustomerId(request.getCustomerId());
+        order.setAmount(request.getAmount());
+        order.setCurrency(request.getCurrency());
+        order.setPaymentMethod(request.getPaymentMethod());
         order.setStatus(OrderStatus.NEW.getValue());
         order.setStatusName(OrderStatus.NEW.name());
         order.setCreatedAt(new Date());
@@ -101,17 +110,86 @@ public class OrderServiceImpl implements OrderService {
     public String checkoutOrder(String orderId) {
         log.info("Checkout order: {}", orderId);
 
-        // TODO push message to Kafka
-        //Order order = orderRepository.findById(orderId).get();
+        Order order = orderRepository.findById(orderId).get();
 
-        String json = """
-                "orderId": 2,
-                "email": "someone@gmail.com",
-                "totalPrice": 1200000
-                """;
+        PmtOrderMessage message = new PmtOrderMessage();
+        message.setOrderId(order.getId());
+        message.setCustomerId(order.getCustomerId());
+        message.setAmount(order.getAmount());
+        message.setCurrency(order.getCurrency());
+        message.setPaymentMethod(order.getPaymentMethod());
 
-        kafkaTemplate.send(checkoutOrderTopic, json);
+        Gson gson = new Gson();
+        String json = gson.toJson(message);
+
+        for (int i = 0; i <= 1000000; i++) {
+            kafkaTemplate.send(checkoutOrderTopic, json);
+        }
+
 
         return "Processing";
+    }
+
+    @KafkaListener(topics = "checkout-order-call-back-topic", groupId = "checkout-order-call-back-group")
+    public void callBackOrder(String message)  {
+        log.info("callBackOrder = {}", message);
+
+//        Gson gson = new Gson();
+//        CallBackMessage callBackMessage = gson.fromJson(message, CallBackMessage.class);
+//
+//        Order order = orderRepository.findById(callBackMessage.orderId).get();
+//        order.setStatus(OrderStatus.PROCESSING.getValue());
+
+        //orderRepository.save(order);
+
+        // push inventory
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    private static class CallBackMessage {
+        private String orderId;
+        private String paymentStatus;
+    }
+
+
+    @Scheduled(fixedRate = 2000)
+    public void scheduleFixedRateTask1() {
+        for (int i = 0; i < 1000000; i++) {
+            kafkaTemplate.send(checkoutOrderTopic, "task1: " + i);
+        }
+    }
+
+
+    @Scheduled(fixedRate = 2000)
+    public void scheduleFixedRateTask2() {
+        for (int i = 0; i < 1000000; i++) {
+            kafkaTemplate.send(checkoutOrderTopic, "task2: " + i);
+        }
+    }
+
+
+    @Scheduled(fixedRate = 2000)
+    public void scheduleFixedRateTask3() {
+        for (int i = 0; i < 1000000; i++) {
+            kafkaTemplate.send(checkoutOrderTopic, "task3: " + i);
+        }
+    }
+
+
+    @Scheduled(fixedRate = 2000)
+    public void scheduleFixedRateTask4() {
+        for (int i = 0; i < 1000000; i++) {
+            kafkaTemplate.send(checkoutOrderTopic, "task4: " + i);
+        }
+    }
+
+
+    @Scheduled(fixedRate = 2000)
+    public void scheduleFixedRateTask5() {
+        for (int i = 0; i < 1000000; i++) {
+            kafkaTemplate.send(checkoutOrderTopic, "task5: " + i);
+        }
     }
 }

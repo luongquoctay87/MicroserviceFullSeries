@@ -12,11 +12,17 @@ import java.util.List;
 @ToString
 public class PlaceOrderRequest implements Serializable {
 
-    @NotNull(message = "userId must be not null")
+    @NotNull(message = "customerId must be not null")
     private Long customerId;
 
-    @NotNull(message = "totalPrice must be not null")
-    private Double totalPrice;
+    @NotNull(message = "amount must be not null")
+    private Long amount;
+
+    @NotNull(message = "currency must be not null")
+    private String currency;
+
+    @NotNull(message = "paymentMethod must be not null")
+    private String paymentMethod;
 
     @NotEmpty(message = "orderItems must be not empty")
     private List<OrderItemRequest> orderItems;

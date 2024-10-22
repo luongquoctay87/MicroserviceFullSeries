@@ -16,11 +16,13 @@ public class Order {
     @Id
     private String id;
 
-    private Long userId;
+    private Long customerId;
 
-    private Double totalPrice;
+    private Long amount;
 
-    private Long paymentId;
+    private String currency;
+
+    private String paymentMethod;
 
     private int status;
 

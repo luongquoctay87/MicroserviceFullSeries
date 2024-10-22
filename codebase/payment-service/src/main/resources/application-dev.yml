@@ -17,6 +17,7 @@ spring:
       ddl-auto: none
   kafka:
     bootstrap-servers: ${KAFKA_SERVER:localhost:29092}
+    order-call-back-topic: checkout-order-call-back-topic
 
 stripe:
   apiKey: sk_test_51Q91kxRwAzcfsrwCTe0g6ZRkGAP61YAO5vg0UtrLHFiuqrkIf4YBEq2Smu232hQQ0pvd7Iooikzt5z4CjLxUU2uq00NuDmFjuW
