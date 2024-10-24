@@ -2,7 +2,6 @@ package vn.tayjava.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.NewTopic;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
-import org.springframework.kafka.support.TopicForRetryable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,14 +21,8 @@ public class KafkaProducer {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
-    @Value("${spring.kafka.topic.checkoutOrder}")
-    private String checkoutOrderTopic;
-
-    @Value("${spring.kafka.topic.updateInventory}")
-    private String updateInventory;
-
-    @Value("${spring.kafka.topic.notifyOrderStatus}")
-    private String notifyOrderStatus;
+    @Value("${spring.kafka.topic}")
+    private String sendEmailTopic;
 
     @Value("${spring.profiles.active}")
     private String profile;
@@ -60,16 +52,6 @@ public class KafkaProducer {
 
     @Bean
     public NewTopic topic1() {
-        return new NewTopic(checkoutOrderTopic, 3, (short) 1);
-    }
-
-    @Bean
-    public NewTopic topic2() {
-        return new NewTopic(updateInventory, 3, (short) 1);
-    }
-
-    @Bean
-    public NewTopic topic3() {
-        return new NewTopic(notifyOrderStatus, 3, (short) 1);
+        return new NewTopic(sendEmailTopic, 3, (short) 1);
     }
 }

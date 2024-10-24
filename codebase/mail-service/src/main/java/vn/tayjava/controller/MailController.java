@@ -1,15 +1,18 @@
 package vn.tayjava.controller;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+import vn.tayjava.service.MailService;
 
 @RestController
 @RequestMapping("/mail")
+@RequiredArgsConstructor
 public class MailController {
 
-    @PostMapping("/send")
-    public String send() {
-        return "sent";
+    private final MailService mailService;
+
+    @GetMapping("/send")
+    public String sendEmail(@RequestParam String toEmail, @RequestParam String subject, @RequestParam String body) {
+       return mailService.sendBySendGrid(toEmail, subject, body);
     }
 }

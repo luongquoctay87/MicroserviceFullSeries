@@ -2,10 +2,12 @@ package vn.tayjava.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +37,10 @@ public class AccountServiceImpl implements AccountService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final KafkaTemplate<String, String> kafkaTemplate;
+
+    @Value("${spring.kafka.topic}")
+    private String sendEmailTopic;
 
     @Override
     public long addUser(UserCreationRequestDTO dto) {
@@ -54,7 +60,9 @@ public class AccountServiceImpl implements AccountService {
 
         userRepository.save(user);
 
-        // TODO send kafka to send email
+        if (user.getId() != null) {
+            kafkaTemplate.send(sendEmailTopic, String.format("email=%s,id=%s,code=%s", user.getEmail(), user.getId(), "code@123"));
+        }
 
         return user.getId();
     }

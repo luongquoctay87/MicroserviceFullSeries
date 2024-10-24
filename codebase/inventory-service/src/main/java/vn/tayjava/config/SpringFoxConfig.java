@@ -1,8 +1,11 @@
 package vn.tayjava.config;
 
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +22,7 @@ public class SpringFoxConfig {
     @Bean
     public GroupedOpenApi publicApi(@Value("${openapi.service.api-docs}") String apiDocs) {
         return org.springdoc.core.models.GroupedOpenApi.builder()
-                .group(apiDocs) // /v3/api-docs/account-service
+                .group(apiDocs) // /v3/api-docs/inventory-service
                 .packagesToScan("vn.tayjava.controller")
                 .build();
     }

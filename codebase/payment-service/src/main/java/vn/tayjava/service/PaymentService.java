@@ -74,37 +74,30 @@ public class PaymentService {
         log.info("checkoutInfo = {}", message);
 
         Gson gson = new Gson();
-        CallBackMessage callBackMessage = CallBackMessage.builder()
-                    .orderId("1")
-                    .paymentStatus("paymentStatus")
+        PmtOrderMessage orderMessage = gson.fromJson(message, PmtOrderMessage.class);
+
+        String paymentStatus = "";
+        // insert save model
+
+        try {
+            PaymentIntent paymentIntent = createPaymentIntent(orderMessage);
+            // PAID(6),
+            paymentStatus = PaymentStatus.PAID.name();
+            log.info("Payment request created");
+        } catch (StripeException e) {
+            log.error("Payment fail, errorMessage = {}", e.getMessage());
+            // them trang thai payment: CANCELED(6),
+            paymentStatus = PaymentStatus.CANCELED.name();
+        } finally {
+            // todo save payment request vao data
+            // push message to order service
+            System.out.println("Payment saved");
+            CallBackMessage callBackMessage = CallBackMessage.builder()
+                    .orderId(orderMessage.getOrderId())
+                    .paymentStatus(paymentStatus)
                     .build();
             kafkaTemplate.send("checkout-order-call-back-topic", gson.toJson(callBackMessage));
-
-//        Gson gson = new Gson();
-//        PmtOrderMessage orderMessage = gson.fromJson(message, PmtOrderMessage.class);
-//
-//        String paymentStatus = "";
-//        // insert save model
-//
-//        try {
-//            PaymentIntent paymentIntent = createPaymentIntent(orderMessage);
-//            // PAID(6),
-//            paymentStatus = PaymentStatus.PROCESSING.name();
-//            log.info("Payment request created");
-//        } catch (StripeException e) {
-//            log.error("Payment fail, errorMessage = {}", e.getMessage());
-//            // them trang thai payment: CANCELED(6),
-//            paymentStatus = PaymentStatus.CANCELED.name();
-//        } finally {
-//            // todo save payment request vao data
-//            // push message to order service
-//            System.out.println("Payment saved");
-//            CallBackMessage callBackMessage = CallBackMessage.builder()
-//                    .orderId(orderMessage.getOrderId())
-//                    .paymentStatus(paymentStatus)
-//                    .build();
-//            kafkaTemplate.send("checkout-order-call-back-topic", gson.toJson(callBackMessage));
-//        }
+        }
 
     }
 

@@ -29,3 +29,8 @@ openapi:
     server: http://localhost:${server.port}
     title: Notification service
     version: 1.0.0
+
+oneSignal:
+  apiUrl: ${ONE_SIGNAL_API_URL:https://onesignal.com/api/v1/notifications}
+  appId: ${APP_ID}
+  apiKey: ${REST_API_KEY}

@@ -61,6 +61,14 @@ public class UserController {
         accountService.changePassword(dto);
     }
 
+    @GetMapping("/confirm/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public String confirmEmail(@PathVariable @Min(1) long userId, @RequestParam String verifyCode) {
+        log.info("-----[ confirmEmail ]-----");
+
+        return "verified";
+    }
+
     @DeleteMapping("/del/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteUser(@PathVariable @Min(1) Long userId) {

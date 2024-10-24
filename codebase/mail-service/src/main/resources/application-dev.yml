@@ -16,6 +16,8 @@ spring:
       hibernate:
         # Format queries
         format_sql: true
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVER:localhost:29092}
 
 # API document setting
 springdoc:

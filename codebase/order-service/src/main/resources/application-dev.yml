@@ -11,7 +11,10 @@ spring:
       database: ${MONGODB_DB:product_db}
   kafka:
     bootstrap-servers: ${KAFKA_SERVER:localhost:29092}
-    topic: checkout-order-topic
+    topic:
+      checkoutOrder: checkout-order-topic
+      updateInventory: update-inventory-topic
+      notifyOrderStatus: notify-order-topic
 
 # API document setting
 springdoc:

@@ -37,8 +37,14 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final KafkaTemplate<String, String> kafkaTemplate;
 
-    @Value("${spring.kafka.topic}")
+    @Value("${spring.kafka.topic.checkoutOrder}")
     private String checkoutOrderTopic;
+
+    @Value("${spring.kafka.topic.updateInventory}")
+    private String updateInventory;
+
+    @Value("${spring.kafka.topic.notifyOrderStatus}")
+    private String notifyOrderStatus;
 
     @Override
     public String addOrder(PlaceOrderRequest request) {
@@ -122,10 +128,7 @@ public class OrderServiceImpl implements OrderService {
         Gson gson = new Gson();
         String json = gson.toJson(message);
 
-        for (int i = 0; i <= 1000000; i++) {
-            kafkaTemplate.send(checkoutOrderTopic, json);
-        }
-
+        kafkaTemplate.send(checkoutOrderTopic, json);
 
         return "Processing";
     }
@@ -134,15 +137,26 @@ public class OrderServiceImpl implements OrderService {
     public void callBackOrder(String message)  {
         log.info("callBackOrder = {}", message);
 
-//        Gson gson = new Gson();
-//        CallBackMessage callBackMessage = gson.fromJson(message, CallBackMessage.class);
-//
-//        Order order = orderRepository.findById(callBackMessage.orderId).get();
-//        order.setStatus(OrderStatus.PROCESSING.getValue());
+        Gson gson = new Gson();
+        CallBackMessage callBackMessage = gson.fromJson(message, CallBackMessage.class);
 
-        //orderRepository.save(order);
+        Order order = orderRepository.findById(callBackMessage.orderId).get();
+        if (callBackMessage.paymentStatus.equals("PAID") ) {
+            // TODO validate enum order status
+            order.setStatusName(OrderStatus.PAID.name());
+            order.setStatus(OrderStatus.PAID.getValue());
+           //  push inventory
+            kafkaTemplate.send(updateInventory, gson.toJson(OrderMessage.builder().orderId(order.getId()).status(order.getStatusName()).build()));
+        } else {
+            order.setStatusName(OrderStatus.CANCELED.name());
+            order.setStatus(OrderStatus.CANCELED.getValue());
+        }
 
-        // push inventory
+        orderRepository.save(order);
+
+        // push message toi notification
+        kafkaTemplate.send(notifyOrderStatus, gson.toJson(OrderMessage.builder().orderId(order.getId()).status(order.getStatusName()).build()));
+
     }
 
     @Getter
@@ -153,43 +167,12 @@ public class OrderServiceImpl implements OrderService {
         private String paymentStatus;
     }
 
-
-    @Scheduled(fixedRate = 2000)
-    public void scheduleFixedRateTask1() {
-        for (int i = 0; i < 1000000; i++) {
-            kafkaTemplate.send(checkoutOrderTopic, "task1: " + i);
-        }
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    private static class OrderMessage {
+        private String orderId;
+        private String status;
     }
 
-
-    @Scheduled(fixedRate = 2000)
-    public void scheduleFixedRateTask2() {
-        for (int i = 0; i < 1000000; i++) {
-            kafkaTemplate.send(checkoutOrderTopic, "task2: " + i);
-        }
-    }
-
-
-    @Scheduled(fixedRate = 2000)
-    public void scheduleFixedRateTask3() {
-        for (int i = 0; i < 1000000; i++) {
-            kafkaTemplate.send(checkoutOrderTopic, "task3: " + i);
-        }
-    }
-
-
-    @Scheduled(fixedRate = 2000)
-    public void scheduleFixedRateTask4() {
-        for (int i = 0; i < 1000000; i++) {
-            kafkaTemplate.send(checkoutOrderTopic, "task4: " + i);
-        }
-    }
-
-
-    @Scheduled(fixedRate = 2000)
-    public void scheduleFixedRateTask5() {
-        for (int i = 0; i < 1000000; i++) {
-            kafkaTemplate.send(checkoutOrderTopic, "task5: " + i);
-        }
-    }
 }
