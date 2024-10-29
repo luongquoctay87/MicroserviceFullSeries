@@ -34,3 +34,9 @@ oneSignal:
   apiUrl: ${ONE_SIGNAL_API_URL:https://onesignal.com/api/v1/notifications}
   appId: ${APP_ID}
   apiKey: ${REST_API_KEY}
+
+amazon:
+  sns:
+    region: ${AMAZON_SNS_REGION:eu-west-1}
+    accessKey: ${AMAZON_SNS_ACCESS_KEY}
+    secretKey: ${AMAZON_SNS_SECRET_KEY}
