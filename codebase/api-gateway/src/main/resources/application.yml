@@ -6,3 +6,29 @@ spring:
     name: api-gateway
   profiles:
     active: @spring.profiles.active@
+
+management: # cho phép hiển thị thông tin sức khoẻ của service
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+  health:
+    circuitbreakers:
+      enabled: true
+    ratelimiters:
+      enabled: true
+
+resilience4j.circuitbreaker: # This specifies the configuration for the circuit breaker module of Resilience4j.
+  configs: # This defines the different circuit breaker configurations. In this case, there is a single configuration named "default".
+    default:
+      registerHealthIndicator: true # This parameter determines whether to register a health indicator for the circuit breaker. It allows monitoring the circuit breaker's health status.
+      slidingWindowSize: 10 # This sets the size of the sliding window used by the circuit breaker to track the success and failure rates of calls.
+      minimumNumberOfCalls: 5 # This specifies the minimum number of calls required within the sliding window before the circuit breaker can calculate the success or failure rate.
+      permittedNumberOfCallsInHalfOpenState: 3 # This sets the maximum number of calls allowed when the circuit breaker is in the half-open state. If this limit is exceeded, the circuit breaker transitions back to the open state.
+      automaticTransitionFromOpenToHalfOpenEnabled: true # This parameter enables or disables automatic transition from the open state to the half-open state when the wait duration in the open state has passed.
+      waitDurationInOpenState: 5s # This determines the duration that the circuit breaker remains in the open state before transitioning to the half-open state. In this case, it is set to 5 seconds.
+      failureRateThreshold: 50 # This sets the failure rate threshold in percentage. If the failure rate exceeds this threshold within the sliding window, the circuit breaker transitions to the open state.
+      eventConsumerBufferSize: 10 # This parameter determines the size of the buffer used by the event consumer for tracking circuit breaker events.

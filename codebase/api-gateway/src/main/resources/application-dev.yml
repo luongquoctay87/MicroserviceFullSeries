@@ -46,6 +46,7 @@ spring:
             - Path=/mail/**, /v3/api-docs/mail-service
           filters:
             - RewritePath=/mail/(?<segment>.*), /mail/$\{segment} # thay thế ký tự /mail/ thành /
+            - ApiRequestFilter
 
 springdoc:
   api-docs:

@@ -15,4 +15,9 @@ public class MailController {
     public String sendEmail(@RequestParam String toEmail, @RequestParam String subject, @RequestParam String body) {
        return mailService.sendBySendGrid(toEmail, subject, body);
     }
+
+    @GetMapping("/simple-send")
+    public String sendEmail() {
+        return "sent";
+    }
 }
