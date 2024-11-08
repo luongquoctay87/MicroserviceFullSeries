@@ -4,7 +4,9 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -75,5 +77,19 @@ public class PaymentController {
 //            throw new Exception("User email is missing");
 //        }
         return paymentService.stripePayment("orderId");
+    }
+
+    @PostMapping
+    public ResponseEntity processPayment(@RequestBody PaymentRequest paymentRequest) {
+        // Logic xử lý thanh toán
+        System.out.println("Payment Processed");
+        return ResponseEntity.ok("Payment Processed");
+    }
+
+    @PostMapping("/compensate")
+    public ResponseEntity refundPayment(@RequestBody PaymentRequest paymentRequest) {
+        // Logic hoàn trả trong trường hợp cần bù trừ
+        System.out.println("Payment Refunded");
+        return ResponseEntity.ok("Payment Refunded");
     }
 }

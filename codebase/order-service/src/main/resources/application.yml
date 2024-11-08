@@ -31,3 +31,6 @@ logging:
   level:
     root: INFO
     web: OFF
+    org:
+      apache:
+        kafka: OFF

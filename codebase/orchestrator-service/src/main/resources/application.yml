@@ -1,9 +1,9 @@
 server:
-  port: 8085
+  port: 8090
 
 spring:
   application:
-    name: payment-service
+    name: orchestrator-service
   profiles:
     active: @spring.profiles.active@
 
@@ -31,6 +31,3 @@ logging:
   level:
     root: INFO
     web: OFF
-    org:
-      apache:
-        kafka: OFF

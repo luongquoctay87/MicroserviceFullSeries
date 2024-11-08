@@ -1,12 +1,15 @@
 package vn.tayjava.controller;
 
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import vn.tayjava.controller.request.OrderRequest;
 import vn.tayjava.controller.request.PlaceOrderRequest;
 import vn.tayjava.service.OrderService;
 
@@ -48,4 +51,20 @@ public class OrderController {
         log.info("checkoutOrder request: {}", orderId);
         return ResponseEntity.ok(orderService.checkoutOrder(orderId));
     }
+
+    @PostMapping("")
+    public ResponseEntity createOrder(@RequestBody OrderRequest orderRequest) {
+        // Logic để tạo đơn hàng
+        System.out.println("Order Created");
+        return ResponseEntity.ok("Order Created");
+    }
+
+    @PostMapping("/compensate")
+    public ResponseEntity cancelOrder(@RequestBody OrderRequest orderRequest) {
+        // Logic để hủy đơn hàng trong trường hợp cần bù trừ
+        System.out.println("Order Canceled");
+        return ResponseEntity.ok("Order Canceled");
+    }
+
+
 }

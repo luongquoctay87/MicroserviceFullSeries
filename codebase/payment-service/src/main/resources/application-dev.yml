@@ -21,3 +21,16 @@ spring:
 
 stripe:
   apiKey: sk_test_51Q91kxRwAzcfsrwCTe0g6ZRkGAP61YAO5vg0UtrLHFiuqrkIf4YBEq2Smu232hQQ0pvd7Iooikzt5z4CjLxUU2uq00NuDmFjuW
+
+# API document setting
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+openapi:
+  service:
+    api-docs: payment-service
+    server: http://localhost:${server.port}
+    title: Payment service
+    version: 1.0.0
