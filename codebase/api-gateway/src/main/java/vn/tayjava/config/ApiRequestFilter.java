@@ -98,6 +98,7 @@ public class ApiRequestFilter extends AbstractGatewayFilterFactory<ApiRequestFil
         List<String> permitUrls = new LinkedList<>();
         permitUrls.add("/access-token");
         permitUrls.add("/refresh-token");
+        permitUrls.add("/test-cors");
 
         return permitUrls.contains(url);
     }

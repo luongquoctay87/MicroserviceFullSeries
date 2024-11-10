@@ -6,6 +6,18 @@ spring:
     add-properties: true
   cloud:
     gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:5173"
+            allowedHeaders: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
       routes: # điều hướng request đến service tương ứng thông qua chỉ định trên url
         - id: authentication-service
           uri: http://localhost:8081

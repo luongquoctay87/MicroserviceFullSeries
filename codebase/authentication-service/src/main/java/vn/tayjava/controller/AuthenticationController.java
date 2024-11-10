@@ -33,4 +33,10 @@ public record AuthenticationController(AuthenticationService authenticationServi
         log.info("POST /refresh-token");
         return new ResponseEntity<>(authenticationService.createRefreshToken(request), OK);
     }
+
+    @GetMapping("/test-cors")
+    public ResponseEntity<TokenResponse> cors() {
+
+        return new ResponseEntity<>(TokenResponse.builder().accessToken("ACCESSTOKEN").refreshToken("REFRESHTOKEN").build(), OK);
+    }
 }
