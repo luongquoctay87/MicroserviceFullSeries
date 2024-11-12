@@ -17,6 +17,7 @@ management: # Health check
     web:
       exposure:
         include: '*'
+        # include: health,prometheus,metrics
 #  endpoint:
 #    health:
 #      probes:

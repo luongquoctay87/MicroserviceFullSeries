@@ -1,0 +1,17 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'api-gateway'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'api-gateway:4953' ]
+        labels:
+          application: 'API Gateway'
+
+  - job_name: 'authentication-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'authentication-service:8081' ]
+        labels:
+          application: 'Authentication service'

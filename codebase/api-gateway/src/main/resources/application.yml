@@ -12,6 +12,7 @@ management: # cho phép hiển thị thông tin sức khoẻ của service
     web:
       exposure:
         include: '*'
+        # include: health,prometheus,metrics
   endpoint:
     health:
       show-details: always

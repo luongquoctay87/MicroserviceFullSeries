@@ -39,4 +39,10 @@ public record AuthenticationController(AuthenticationService authenticationServi
 
         return new ResponseEntity<>(TokenResponse.builder().accessToken("ACCESSTOKEN").refreshToken("REFRESHTOKEN").build(), OK);
     }
+
+    @GetMapping("/test-delay")
+    public ResponseEntity<String> delay() throws InterruptedException {
+        Thread.sleep(10000);
+        return new ResponseEntity<>("Delayed !!!", OK);
+    }
 }

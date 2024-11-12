@@ -6,6 +6,18 @@ spring:
     add-properties: false
   cloud:
     gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:5173"
+            allowedHeaders: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
       routes: # điều hướng request đến service tương ứng thông qua chỉ định trên url
         - id: authentication-service
           uri: http://host.docker.internal:8081
@@ -66,3 +78,15 @@ springdoc:
         name: Inventory Service
       - url: /v3/api-docs/mail-service
         name: Mail Service
+
+redis:
+  host: localhost
+  port: 6379
+
+grpc:
+  client:
+    verify-token-service:
+      address: static://localhost:9091
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext

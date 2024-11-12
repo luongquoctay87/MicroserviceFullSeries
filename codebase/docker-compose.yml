@@ -81,28 +81,52 @@ services:
     networks:
       - default
 
-#  api-gateway:
-#    container_name: api-gateway
-#    build:
-#      context: ./api-gateway
-#      dockerfile: Dockerfile
-#    ports:
-#      - '4953:4953'
-#    networks:
-#      - default
-#
-#  auth-service:
-#    container_name: authentication-service
-#    build:
-#      context: ./authentication-service
-#      dockerfile: Dockerfile
-#    environment:
-#      API_GATEWAY: http://localhost:4953
-#    ports:
-#      - '8081:8081'
-#    networks:
-#      - default
-#
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    restart: unless-stopped
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - '9090:9090'
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+    environment: # account: grafana/password
+      - GF_SECURITY_ADMIN_USER=grafana
+      - GF_SECURITY_ADMIN_PASSWORD=password
+    ports:
+      - '3000:3000'
+    links:
+      - prometheus
+    volumes:
+      - grafana:/var/lib/grafana
+
+  api-gateway:
+    container_name: api-gateway
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - '4953:4953'
+    networks:
+      - default
+
+  auth-service:
+    container_name: authentication-service
+    build:
+      context: ./authentication-service
+      dockerfile: Dockerfile
+    environment:
+      API_GATEWAY: http://api-gateway:4953
+    ports:
+      - '8081:8081'
+    networks:
+      - default
+
 #  account-service:
 #    container_name: account-service
 #    build:
@@ -202,3 +226,4 @@ networks:
 volumes:
   postgres:
   data:
+  grafana:
