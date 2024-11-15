@@ -27,7 +27,7 @@ services:
     networks:
       - default
 
-  elastic-search:
+  elasticsearch:
     image: elasticsearch:7.14.1
     container_name: elasticsearch
     restart: always
@@ -35,97 +35,124 @@ services:
       - "9200:9200"
     environment:
       - discovery.type=single-node
-
-  mongo:
-    image: mongo:6-jammy
-    container_name: mongodb
+    networks:
+      - default
+  kibana:
+    image: kibana:7.14.1
+    container_name: kibana
+    restart: always
     ports:
-      - '27017:27017'
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    networks:
+      - default
+  logstash:
+    image: logstash:7.14.1
+    container_name: logstash
+    restart: always
+    ports:
+      - "5600:5600" # Socket port
+      - "5044:5044"
+    #      - "9600:9600"
     volumes:
-      - data:/data/db
-
-  zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-    container_name: zookeeper
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
     environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-    ports:
-      - '22181:2181'
-
-  kafka:
-    image: confluentinc/cp-kafka:latest
-    container_name: kafka
-    depends_on:
-      - zookeeper
-    ports:
-      - '29092:29092'
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-
-  kafka-ui:
-    image: provectuslabs/kafka-ui:latest
-    container_name: ms-kafka-ui
-    ports:
-      - "9191:8080"
-    environment:
-      KAFKA_CLUSTERS_0_NAME: local
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092  # Internal service communication
-    depends_on:
-      - kafka
+      - XPACK_MONITORING_ELASTICSEARCH_HOSTS=http://elastic-search:9200
+      - XPACK_MONITORING_ENABLED=true
     networks:
       - default
 
-  prometheus:
-    image: prom/prometheus
-    container_name: prometheus
-    restart: unless-stopped
-    command:
-      - --config.file=/etc/prometheus/prometheus.yml
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    ports:
-      - '9090:9090'
-  grafana:
-    image: grafana/grafana
-    container_name: grafana
-    restart: unless-stopped
-    environment: # account: grafana/password
-      - GF_SECURITY_ADMIN_USER=grafana
-      - GF_SECURITY_ADMIN_PASSWORD=password
-    ports:
-      - '3000:3000'
-    links:
-      - prometheus
-    volumes:
-      - grafana:/var/lib/grafana
+#  mongo:
+#    image: mongo:6-jammy
+#    container_name: mongodb
+#    ports:
+#      - '27017:27017'
+#    volumes:
+#      - data:/data/db
 
-  api-gateway:
-    container_name: api-gateway
-    build:
-      context: ./api-gateway
-      dockerfile: Dockerfile
-    ports:
-      - '4953:4953'
-    networks:
-      - default
+#  zookeeper:
+#    image: confluentinc/cp-zookeeper:latest
+#    container_name: zookeeper
+#    environment:
+#      ZOOKEEPER_CLIENT_PORT: 2181
+#      ZOOKEEPER_TICK_TIME: 2000
+#    ports:
+#      - '22181:2181'
 
-  auth-service:
-    container_name: authentication-service
-    build:
-      context: ./authentication-service
-      dockerfile: Dockerfile
-    environment:
-      API_GATEWAY: http://api-gateway:4953
-    ports:
-      - '8081:8081'
-    networks:
-      - default
+#  kafka:
+#    image: confluentinc/cp-kafka:latest
+#    container_name: kafka
+#    depends_on:
+#      - zookeeper
+#    ports:
+#      - '29092:29092'
+#    environment:
+#      KAFKA_BROKER_ID: 1
+#      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+#      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+#  kafka-ui:
+#    image: provectuslabs/kafka-ui:latest
+#    container_name: ms-kafka-ui
+#    ports:
+#      - "9191:8080"
+#    environment:
+#      KAFKA_CLUSTERS_0_NAME: local
+#      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092  # Internal service communication
+#    depends_on:
+#      - kafka
+#    networks:
+#      - default
+
+#  prometheus:
+#    image: prom/prometheus
+#    container_name: prometheus
+#    restart: unless-stopped
+#    command:
+#      - --config.file=/etc/prometheus/prometheus.yml
+#    volumes:
+#      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+#    ports:
+#      - '9090:9090'
+#  grafana:
+#    image: grafana/grafana
+#    container_name: grafana
+#    restart: unless-stopped
+#    environment: # account: grafana/password
+#      - GF_SECURITY_ADMIN_USER=grafana
+#      - GF_SECURITY_ADMIN_PASSWORD=password
+#    ports:
+#      - '3000:3000'
+#    links:
+#      - prometheus
+#    volumes:
+#      - grafana:/var/lib/grafana
+
+#  api-gateway:
+#    container_name: api-gateway
+#    build:
+#      context: ./api-gateway
+#      dockerfile: Dockerfile
+#    ports:
+#      - '4953:4953'
+#    networks:
+#      - default
+#
+#  auth-service:
+#    container_name: authentication-service
+#    build:
+#      context: ./authentication-service
+#      dockerfile: Dockerfile
+#    environment:
+#      API_GATEWAY: http://api-gateway:4953
+#    ports:
+#      - '8081:8081'
+#    networks:
+#      - default
 
 #  account-service:
 #    container_name: account-service

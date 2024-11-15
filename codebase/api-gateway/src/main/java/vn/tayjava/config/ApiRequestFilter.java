@@ -9,7 +9,6 @@ import org.springframework.http.*;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 import reactor.core.publisher.Mono;
 import vn.tayjava.grpcserver.VerifyResponse;
 import vn.tayjava.service.VerifyTokenService;

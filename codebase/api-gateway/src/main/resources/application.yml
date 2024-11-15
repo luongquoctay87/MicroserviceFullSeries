@@ -33,3 +33,11 @@ resilience4j.circuitbreaker: # This specifies the configuration for the circuit 
       waitDurationInOpenState: 5s # This determines the duration that the circuit breaker remains in the open state before transitioning to the half-open state. In this case, it is set to 5 seconds.
       failureRateThreshold: 50 # This sets the failure rate threshold in percentage. If the failure rate exceeds this threshold within the sliding window, the circuit breaker transitions to the open state.
       eventConsumerBufferSize: 10 # This parameter determines the size of the buffer used by the event consumer for tracking circuit breaker events.
+
+logging:
+  level:
+    root: INFO
+    web: INFO
+    org.springframework: INFO
+#  file:
+#    name: ${spring.application.name}.log
