@@ -25,18 +25,21 @@ spring:
             - Path=/auth/**, /v3/api-docs/authentication-service
           filters:
             - RewritePath=/auth/(?<segment>.*), /$\{segment} # thay thế ký tự /auth/ thành /
+            - ApiRequestFilter
         - id: account-service
           uri: http://host.docker.internal:8082
           predicates:
             - Path=/account/**, /v3/api-docs/account-service
           filters:
             - RewritePath=/account/(?<segment>.*), /$\{segment} # thay thế ký tự /account/ thành /
+            - ApiRequestFilter
         - id: product-service
           uri: http://host.docker.internal:8083
           predicates:
             - Path=/product/**, /v3/api-docs/product-service
           filters:
-            - RewritePath=/product/(?<segment>.*), /product/$\{segment} # thay thế ký tự /product/ thành /
+            - RewritePath=/product/(?<segment>.*), /$\{segment} # thay thế ký tự /product/ thành /
+            - ApiRequestFilter
         - id: order-service
           uri: http://host.docker.internal:8084
           predicates:
@@ -55,38 +58,46 @@ spring:
             - Path=/mail/**, /v3/api-docs/mail-service
           filters:
             - RewritePath=/mail/(?<segment>.*), /mail/$\{segment} # thay thế ký tự /mail/ thành /
+            - ApiRequestFilter
+        - id: orchestrator-service
+          uri: http://host.docker.internal:8090
+          predicates:
+            - Path=/mail/**, /v3/api-docs/orchestrator-service
+          filters:
+            - RewritePath=/orchestrator/(?<segment>.*), /mail/$\{segment} # thay thế ký tự /mail/ thành /
+            - ApiRequestFilter
 
-springdoc:
-  api-docs:
-    enabled: true
-  swagger-ui:
-    enabled: true
-    path: /swagger-ui.html
-    config-url: /v3/api-docs/swagger-config
-    urls:
-      - url: /v3/api-docs
-        name: API Gateway
-      - url: /v3/api-docs/authentication-service
-        name: Authentication Service
-      - url: /v3/api-docs/account-service
-        name: Account Service
-      - url: /v3/api-docs/product-service
-        name: Product Service
-      - url: /v3/api-docs/order-service
-        name: Order Service
-      - url: /v3/api-docs/inventory-service
-        name: Inventory Service
-      - url: /v3/api-docs/mail-service
-        name: Mail Service
+      springdoc:
+        api-docs:
+          enabled: true
+        swagger-ui:
+          enabled: true
+          path: /swagger-ui.html
+          config-url: /v3/api-docs/swagger-config
+          urls:
+            - url: /v3/api-docs
+              name: API Gateway
+            - url: /v3/api-docs/authentication-service
+              name: Authentication Service
+            - url: /v3/api-docs/account-service
+              name: Account Service
+            - url: /v3/api-docs/product-service
+              name: Product Service
+            - url: /v3/api-docs/order-service
+              name: Order Service
+            - url: /v3/api-docs/inventory-service
+              name: Inventory Service
+            - url: /v3/api-docs/mail-service
+              name: Mail Service
 
 redis:
-  host: localhost
-  port: 6379
+  host: ${REDIS_HOST:host.docker.internal}
+  port: ${REDIS_PORT:6379}
 
 grpc:
   client:
     verify-token-service:
-      address: static://localhost:9091
+      address: static://${AUTH_GRPC_SERVER:host.docker.internal:9091}
       enableKeepAlive: true
       keepAliveWithoutCalls: true
       negotiationType: plaintext

@@ -1,21 +1,20 @@
 spring:
   config:
     activate:
-      on-profile: test
+      on-profile: dev
   devtools:
-    add-properties: false
-  jpa:
-    # Provide database platform that is being used
-    database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      # New database is created when app starts and destroyed when app stops
-      ddl-auto: none
-    # Show sql when spring data jpa performs query
-    show-sql: false
-    properties:
-      hibernate:
-        # Format queries
-        format_sql: false
+    add-properties: true
+  data:
+    mongodb:
+      host: ${MONGODB_HOST:host.docker.internal}
+      port: ${MONGODB_PORT:27017}
+      database: ${MONGODB_DB:product_db}
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVER:host.docker.internal:29092}
+    topic:
+      checkoutOrder: checkout-order-topic
+      updateInventory: update-inventory-topic
+      notifyOrderStatus: notify-order-topic
 
 # API document setting
 springdoc:
@@ -26,6 +25,11 @@ springdoc:
 openapi:
   service:
     api-docs: order-service
-    server: ${API_GATEWAY:http://localhost:4953}/order
+    server: ${API_GATEWAY:http://localhost:${server.port}}
     title: Order service
     version: 1.0.0
+
+aws:
+  region: us-west-2
+  dynamodb:
+    endpoint: http://localhost:8000

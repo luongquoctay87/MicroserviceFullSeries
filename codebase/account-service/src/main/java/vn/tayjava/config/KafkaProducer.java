@@ -29,7 +29,8 @@ public class KafkaProducer {
 
     @Bean
     public ProducerFactory<String, String> producerFactory() {
-        log.debug("Creating producer factory");
+        log.info("Creating producer factory");
+
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);

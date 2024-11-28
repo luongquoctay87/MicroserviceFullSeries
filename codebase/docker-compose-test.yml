@@ -138,9 +138,7 @@ services:
 
   api-gateway:
     container_name: api-gateway
-    build:
-      context: ./api-gateway
-      dockerfile: Dockerfile
+    image: luongquoctay87/api-gateway:latest
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
@@ -152,9 +150,7 @@ services:
 
   auth-service:
     container_name: authentication-service
-    build:
-      context: ./authentication-service
-      dockerfile: Dockerfile
+    image: luongquoctay87/auth-service:latest
     environment:
       POSTGRES_URL: jdbc:postgresql://postgres:5439/postgres
       POSTGRES_USER: postgres
@@ -169,21 +165,19 @@ services:
     networks:
       - default
 
-  account-service:
-    container_name: account-service
-    build:
-      context: ./account-service
-      dockerfile: Dockerfile
-    environment:
-      POSTGRES_URL: jdbc:postgresql://postgres:5439/postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      API_GATEWAY: http://api-gateway:4953
-      KAFKA_SERVER: kafka:29092
-    ports:
-      - '8082:8082'
-    networks:
-      - default
+#  account-service:
+#    container_name: account-service
+#    image: luongquoctay87/account-service:latest
+#    environment:
+#      POSTGRES_URL: jdbc:postgresql://postgres:5439/postgres
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: password
+#      API_GATEWAY: http://api-gateway:4953
+#      KAFKA_SERVER: kafka:29092
+#    ports:
+#      - '8082:8082'
+#    networks:
+#      - default
 
 #  product-service:
 #    container_name: product-service

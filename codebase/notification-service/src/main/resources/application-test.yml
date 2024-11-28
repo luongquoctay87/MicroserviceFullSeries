@@ -3,19 +3,19 @@ spring:
     activate:
       on-profile: test
   devtools:
-    add-properties: false
+    add-properties: true
   jpa:
     # Provide database platform that is being used
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       # New database is created when app starts and destroyed when app stops
-      ddl-auto: none
+      ddl-auto: update
     # Show sql when spring data jpa performs query
     show-sql: false
     properties:
       hibernate:
         # Format queries
-        format_sql: false
+        format_sql: true
 
 # API document setting
 springdoc:
@@ -26,6 +26,17 @@ springdoc:
 openapi:
   service:
     api-docs: notification-service
-    server: ${API_GATEWAY:http://localhost:4953}/notification
+    server: ${API_GATEWAY:http://localhost:${server.port}}
     title: Notification service
     version: 1.0.0
+
+oneSignal:
+  apiUrl: ${ONE_SIGNAL_API_URL:https://onesignal.com/api/v1/notifications}
+  appId: ${APP_ID}
+  apiKey: ${REST_API_KEY}
+
+amazon:
+  sns:
+    region: ${AMAZON_SNS_REGION:eu-west-1}
+    accessKey: ${AMAZON_SNS_ACCESS_KEY}
+    secretKey: ${AMAZON_SNS_SECRET_KEY}

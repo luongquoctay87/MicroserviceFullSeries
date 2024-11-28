@@ -4,18 +4,20 @@ spring:
       on-profile: test
   devtools:
     add-properties: false
+  datasource:
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5439/postgres}
+    username: ${POSTGRES_USER:quoctay}
+    password: ${POSTGRES_PASSWORD:password}
   jpa:
-    # Provide database platform that is being used
-    database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      # New database is created when app starts and destroyed when app stops
-      ddl-auto: none
-    # Show sql when spring data jpa performs query
-    show-sql: false
     properties:
       hibernate:
-        # Format queries
-        format_sql: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVER:localhost:29092}
+    topic: send-email-register-topic
 
 # API document setting
 springdoc:
