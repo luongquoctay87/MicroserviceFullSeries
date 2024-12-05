@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment # Kubernetes' resource kind we are creating
+metadata:
+  name: contact-deployment
+spec:
+  selector:
+    matchLabels:
+      app: contact
+  replicas: 1 # Number of replicas that will be created for this deployment
+  template:
+    metadata:
+      labels:
+        app: contact
+    spec:
+      containers:
+        - name: contact
+          image: contact:latest # Image that will be used to containers in the cluster
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "300Mi"
+            limits:
+              memory: "500Mi"
+          ports:
+            - name: app
+              containerPort: 2634
+              protocol: TCP
+            - name: grpc
+              containerPort: 3634
+              protocol: TCP
+          env:
+            - name: KAFKA_BROKER
+              valueFrom:
+                configMapKeyRef:
+                  key: kafka-broker
+                  name: backend
+            - name: HOSTNAME
+              valueFrom:
+                configMapKeyRef:
+                  key: hostname
+                  name: backend
+            - name: CONTACTS
+              value: "${HOSTNAME}/contacts"
+            - name: SPRING_APPLICATION_JSON
+              valueFrom:
+                configMapKeyRef:
+                  key: datasource-config.json
+                  name: backend
+            - name: JAVA_TOOL_OPTIONS
+              value: '-Xdebug -agentlib:jdwp=transport=dt_socket,address=0.0.0.0:5005,server=y,suspend=n'
+---
+apiVersion: v1 # Kubernetes API version
+kind: Service # Kubernetes' resource kind we are creating
+metadata: # Metadata of the resource kind we are creating
+  name: contact-service
+spec:
+  selector:
+    app: contact
+  ports:
+    - name: http
+      protocol: "TCP"
+      port: 2634 # The port that the service is running on in the cluster
+      targetPort: 2634 # The port exposed by the service
+    - name: grpc
+      protocol: "TCP"
+      port: 3634 # The port that the service is running on in the cluster
+      targetPort: 3634 # The port exposed by the service
+  type: ClusterIP # type of the service.

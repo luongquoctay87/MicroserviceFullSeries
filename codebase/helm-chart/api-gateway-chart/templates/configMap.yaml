@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-gateway-configmap
+data:
+  redisHost: "redis-release-redis-chart"
+  redisPort: "6379"

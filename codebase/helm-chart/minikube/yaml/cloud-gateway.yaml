@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment # Kubernetes' resource kind we are creating
+metadata:
+  name: cloud-gateway-deployment
+spec:
+  selector:
+    matchLabels:
+      app: cloud-gateway
+  replicas: 1 # Number of replicas that will be created for this deployment
+  template:
+    metadata:
+      labels:
+        app: cloud-gateway
+    spec:
+      containers:
+        - name: cloud-gateway
+          image: cloud-gateway:latest # Image that will be used to containers in the cluster
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "300Mi"
+            limits:
+              memory: "500Mi"
+          ports:
+            - containerPort: 2630 # The port that the container is running on in the cluster
+          env:
+            - name: JWT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: jwt-secret-key
+                  name: secret-keys
+            - name: JAVA_TOOL_OPTIONS
+              value: '-Xdebug -agentlib:jdwp=transport=dt_socket,address=0.0.0.0:5005,server=y,suspend=n'
+---
+apiVersion: v1 # Kubernetes API version
+kind: Service # Kubernetes' resource kind we are creating
+metadata: # Metadata of the resource kind we are creating
+  name: cloud-gateway-service
+spec:
+  selector:
+    app: cloud-gateway
+  ports:
+    - protocol: "TCP"
+      port: 2630 # The port that the service is running on in the cluster
+      targetPort: 2630 # The port exposed by the service
+  type: LoadBalancer # type of the service.

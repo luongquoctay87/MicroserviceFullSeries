@@ -1,0 +1,11 @@
+Test Kafka by kcat
+
+kubectl port-forward kafka-broker-75cfd66665-796xg 9092:9092
+
+echo "hello world" | kcat -P -b localhost:9092 -t test
+
+kcat -C -b localhost:9092 -t test
+
+kubectl exec "$POD_NAME" -- env
+
+kubectl exec -ti $POD_NAME -- bash

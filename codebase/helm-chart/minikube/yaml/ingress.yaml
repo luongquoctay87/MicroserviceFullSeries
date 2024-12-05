@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: local-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+
+spec:
+  rules:
+    - host: api-local.k8s
+      http:
+        paths:
+          - path: /.*
+            pathType: Prefix
+            backend:
+              service:
+                name: cloud-gateway-service
+                port:
+                  number: 2630

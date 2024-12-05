@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend
+data:
+  hostname: "http://127.0.0.1:2630"
+  domain-name: "http://localhost.fe:8500"
+  kafka-broker: "kafka-service:9092"
+  datasource-config.json:
+    '{
+      "amazon-dynamodb-endpoint": "dynamodb-endpoint",
+      "amazon-dynamodb-region": "dynamodb-region",
+      "amazon-dynamodb-accessKey": "dynamodb-accessKey",
+      "amazon-dynamodb-secretKey": "dynamodb-secretKey",
+      "amazon-s3-accessKey": "s3-accessKey",
+      "amazon-s3-secretKey": "s3-secretKey",
+      "amazon-s3-region": "s3-region",
+      "amazon-s3-uploads": "s3-folder",
+      "amazon-s3-avatar": "s3-folder",
+      "amazon-s3-massEmail": "s3-folder",
+      "amazon-s3-template": "s3-folder",
+      "spring-mail-host": "mail-host",
+      "spring-mail-port": "mail-port",
+      "spring-mail-server": "no-reply@email.com",
+      "spring-mail-username": "mail-username",
+      "spring-mail-password": "mail-password"
+     }'

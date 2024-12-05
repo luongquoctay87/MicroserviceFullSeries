@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment # Kubernetes' resource kind we are creating
+metadata:
+  name: common-deployment
+spec:
+  selector:
+    matchLabels:
+      app: common
+  replicas: 1 # Number of replicas that will be created for this deployment
+  template:
+    metadata:
+      labels:
+        app: common
+    spec:
+      containers:
+        - name: common
+          image: common:latest # Image that will be used to containers in the cluster
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "300Mi"
+            limits:
+              memory: "500Mi"
+          ports:
+            - name: app
+              containerPort: 2641
+              protocol: TCP
+            - name: grpc
+              containerPort: 3641
+              protocol: TCP
+          env:
+            - name: REDIS_CLUSTER
+              value: "redis-service"
+            - name: KAFKA_BROKER
+              valueFrom:
+                configMapKeyRef:
+                  key: kafka-broker
+                  name: backend
+            - name: HOSTNAME
+              valueFrom:
+                configMapKeyRef:
+                  key: hostname
+                  name: backend
+            - name: DOMAIN_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: domain-name
+                  name: backend
+            - name: COMMON
+              value: "${HOSTNAME}/common"
+            - name: SPRING_APPLICATION_JSON
+              valueFrom:
+                configMapKeyRef:
+                  key: datasource-config.json
+                  name: backend
+            - name: JAVA_TOOL_OPTIONS
+              value: '-Xdebug -agentlib:jdwp=transport=dt_socket,address=0.0.0.0:5005,server=y,suspend=n'
+---
+apiVersion: v1 # Kubernetes API version
+kind: Service # Kubernetes' resource kind we are creating
+metadata: # Metadata of the resource kind we are creating
+  name: common-service
+spec:
+  selector:
+    app: common
+  ports:
+    - name: http
+      protocol: "TCP"
+      port: 2641 # The port that the service is running on in the cluster
+      targetPort: 2641 # The port exposed by the service
+    - name: grpc
+      protocol: "TCP"
+      port: 3641 # The port that the service is running on in the cluster
+      targetPort: 3641 # The port exposed by the service
+  type: ClusterIP # type of the service.

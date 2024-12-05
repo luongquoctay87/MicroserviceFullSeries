@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment # Kubernetes' resource kind we are creating
+metadata:
+  name: fund-transfer-deployment
+spec:
+  selector:
+    matchLabels:
+      app: fund-transfer
+  replicas: 1 # Number of replicas that will be created for this deployment
+  template:
+    metadata:
+      labels:
+        app: fund-transfer
+    spec:
+      containers:
+        - name: fund-transfer
+          image: fund-transfer:latest # Image that will be used to containers in the cluster
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "300Mi"
+            limits:
+              memory: "500Mi"
+          ports:
+            - name: app
+              containerPort: 2644
+              protocol: TCP
+          env:
+            - name: KAFKA_BROKER
+              valueFrom:
+                configMapKeyRef:
+                  key: kafka-broker
+                  name: backend
+            - name: HOSTNAME
+              valueFrom:
+                configMapKeyRef:
+                  key: hostname
+                  name: backend
+            - name: FUND_TRANSFER
+              value: "${HOSTNAME}/fund-transfer"
+            - name: SPRING_APPLICATION_JSON
+              valueFrom:
+                configMapKeyRef:
+                  key: datasource-config.json
+                  name: backend
+            - name: JAVA_TOOL_OPTIONS
+              value: '-Xdebug -agentlib:jdwp=transport=dt_socket,address=0.0.0.0:5005,server=y,suspend=n'
+---
+apiVersion: v1 # Kubernetes API version
+kind: Service # Kubernetes' resource kind we are creating
+metadata: # Metadata of the resource kind we are creating
+  name: fund-transfer-service
+spec:
+  selector:
+    app: fund-transfer
+  ports:
+    - name: http
+      protocol: "TCP"
+      port: 2644 # The port that the service is running on in the cluster
+      targetPort: 2644 # The port exposed by the service
+  type: ClusterIP # type of the service.

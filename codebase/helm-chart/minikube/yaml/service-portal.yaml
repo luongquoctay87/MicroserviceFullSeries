@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment # Kubernetes' resource kind we are creating
+metadata:
+  name: service-portal-deployment
+spec:
+  selector:
+    matchLabels:
+      app: service-portal
+  replicas: 1 # Number of replicas that will be created for this deployment
+  template:
+    metadata:
+      labels:
+        app: service-portal
+    spec:
+      containers:
+        - name: service-portal
+          image: service-portal:latest # Image that will be used to containers in the cluster
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "300Mi"
+            limits:
+              memory: "500Mi"
+          ports:
+            - name: app
+              containerPort: 4020
+              protocol: TCP
+          env:
+            - name: REDIS_CLUSTER
+              value: "redis-service"
+            - name: HOSTNAME
+              valueFrom:
+                configMapKeyRef:
+                  key: hostname
+                  name: backend
+            - name: DOMAIN_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: domain-name
+                  name: backend
+            - name: SERVICE_PORTAL
+              value: "${HOSTNAME}/service-portal"
+            - name: CASE_DESK
+              value: "${HOSTNAME}/case-desks"
+            - name: SPRING_APPLICATION_JSON
+              valueFrom:
+                configMapKeyRef:
+                  key: datasource-config.json
+                  name: backend
+            - name: JAVA_TOOL_OPTIONS
+              value: '-Xdebug -agentlib:jdwp=transport=dt_socket,address=0.0.0.0:5005,server=y,suspend=n'
+---
+apiVersion: v1 # Kubernetes API version
+kind: Service # Kubernetes' resource kind we are creating
+metadata: # Metadata of the resource kind we are creating
+  name: service-portal-service
+spec:
+  selector:
+    app: service-portal
+  ports:
+    - name: http
+      protocol: "TCP"
+      port: 4020 # The port that the service is running on in the cluster
+      targetPort: 4020 # The port exposed by the service
+  type: ClusterIP # type of the service.
