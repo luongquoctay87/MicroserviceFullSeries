@@ -6,25 +6,40 @@ spring:
     add-properties: false
   cloud:
     gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:5173"
+            allowedHeaders: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
       routes: # điều hướng request đến service tương ứng thông qua chỉ định trên url
         - id: authentication-service
-          uri: http://localhost:8081
+          uri: http://auth-auth-chart:8081
           predicates:
             - Path=/auth/**, /v3/api-docs/authentication-service
           filters:
             - RewritePath=/auth/(?<segment>.*), /$\{segment} # thay thế ký tự /auth/ thành /
+            - ApiRequestFilter
         - id: account-service
-          uri: http://localhost:8082
+          uri: http://account-account-chart:8082
           predicates:
             - Path=/account/**, /v3/api-docs/account-service
           filters:
             - RewritePath=/account/(?<segment>.*), /$\{segment} # thay thế ký tự /account/ thành /
+            - ApiRequestFilter
         - id: product-service
           uri: http://localhost:8083
           predicates:
             - Path=/product/**, /v3/api-docs/product-service
           filters:
-            - RewritePath=/product/(?<segment>.*), /product/$\{segment} # thay thế ký tự /product/ thành /
+            - RewritePath=/product/(?<segment>.*), /$\{segment} # thay thế ký tự /product/ thành /
+            - ApiRequestFilter
         - id: order-service
           uri: http://localhost:8084
           predicates:
@@ -43,9 +58,22 @@ spring:
             - Path=/mail/**, /v3/api-docs/mail-service
           filters:
             - RewritePath=/mail/(?<segment>.*), /mail/$\{segment} # thay thế ký tự /mail/ thành /
+            - ApiRequestFilter
 
 springdoc:
   api-docs:
     enabled: false
   swagger-ui:
     enabled: false
+
+redis:
+  host: ${REDIS_HOST:DUMMY-HOST}
+  port: ${REDIS_PORT:DUMMY-PORT}
+
+grpc:
+  client:
+    verify-token-service:
+      address: static://auth-auth-chart:9091
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
